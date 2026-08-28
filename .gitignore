@@ -1,5 +1,17 @@
 # ==========================================
-# Python & Environment Artifacts
+# 1. Dependency & Configuration Overrides
+# ==========================================
+# Explicitly ignore TOML configs and UV lockfile
+*.toml
+pyproject.toml
+uv.lock
+
+# Cache folders ignored
+.uv/
+.cache/
+
+# ==========================================
+# 2. Python Runtime & Environment Artifacts
 # ==========================================
 __pycache__/
 *.py[cod]
@@ -7,13 +19,13 @@ __pycache__/
 *.so
 .Python
 
-# Virtual environments
+# Virtual Environment Directories
 .venv/
 venv/
 ENV/
 env/
 
-# Package building & distribution
+# Build & Package Distributions
 build/
 bdist/
 dist/
@@ -21,25 +33,19 @@ dist/
 .eggs/
 
 # ==========================================
-# Dependency & Package Managers (uv & pip)
+# 3. ACCDS Telemetry, Logs & Datastores
 # ==========================================
-# Note: Keep `uv.lock` in version control for reproducible builds.
-.uv/
-.cache/
-
-# ==========================================
-# ACCDS Layer-Specific Data & Artifacts
-# ==========================================
-# Layer 0 & 6: Data Ingestion & Audit Logs / PCAPs
 *.pcap
 *.pcapng
-*.log
 *.sqlite3
 *.db
+*.log
+
 raw_telemetry/
 audit_logs/
+temp_contracts/
 
-# Layer 2: Machine Learning Models & Baselines
+# Machine Learning Checkpoints
 *.joblib
 *.pkl
 *.onnx
@@ -47,38 +53,29 @@ audit_logs/
 *.pt
 *.pth
 checkpoints/
-ml_baselines/
-
-# Layer 4 & 5: Simulation State & Temporary Dashboards
-.tmp_policy/
-temp_contracts/
 
 # ==========================================
-# Testing, Coverage & Quality Tools
+# 4. Testing & Code Quality Caches
 # ==========================================
 .pytest_cache/
 .coverage
 htmlcov/
 .mypy_cache/
 .ruff_cache/
-.hypothesis/
 
 # ==========================================
-# Editor & Operating System Files
+# 5. OS & Editor Configurations
 # ==========================================
-# VS Code / COSMIC Desktop / Linux system
-.vscode/
+.DS_Store
+Thumbs.db
+*~
+*.swp
+
+.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/extensions.json
-*.swp
-*~
-.DS_Store
-Thumbs.db
+.idea/
 
-# Environment variables & secrets
 .env
-.env.local
-*.pem
-*.key
+.env.*
