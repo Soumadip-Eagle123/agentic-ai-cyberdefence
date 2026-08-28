@@ -1,0 +1,84 @@
+# ==========================================
+# Python & Environment Artifacts
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Package building & distribution
+build/
+bdist/
+dist/
+*.egg-info/
+.eggs/
+
+# ==========================================
+# Dependency & Package Managers (uv & pip)
+# ==========================================
+# Note: Keep `uv.lock` in version control for reproducible builds.
+.uv/
+.cache/
+
+# ==========================================
+# ACCDS Layer-Specific Data & Artifacts
+# ==========================================
+# Layer 0 & 6: Data Ingestion & Audit Logs / PCAPs
+*.pcap
+*.pcapng
+*.log
+*.sqlite3
+*.db
+raw_telemetry/
+audit_logs/
+
+# Layer 2: Machine Learning Models & Baselines
+*.joblib
+*.pkl
+*.onnx
+*.h5
+*.pt
+*.pth
+checkpoints/
+ml_baselines/
+
+# Layer 4 & 5: Simulation State & Temporary Dashboards
+.tmp_policy/
+temp_contracts/
+
+# ==========================================
+# Testing, Coverage & Quality Tools
+# ==========================================
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+
+# ==========================================
+# Editor & Operating System Files
+# ==========================================
+# VS Code / COSMIC Desktop / Linux system
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Environment variables & secrets
+.env
+.env.local
+*.pem
+*.key
