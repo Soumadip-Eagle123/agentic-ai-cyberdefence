@@ -1,0 +1,154 @@
+{
+  "case_id": "CASE-d093d780",
+  "scenario_id": "low_confidence",
+  "view": "operational",
+  "generated_at": "2026-09-05T14:23:58.944466+00:00",
+  "entries": [
+    {
+      "sequence": 1,
+      "audit_id": "audit-c7bb51a027f2",
+      "timestamp": "2026-01-05T07:44:00+00:00",
+      "layer": 1,
+      "layer_name": "Asset Intelligence",
+      "actor": "layer1.asset_intelligence",
+      "action": "asset.context.resolved",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "Asset asset~6ca5b1ee26c5 identified as office_endpoint in administration, clinical tier 3, identity confidence 1.0",
+      "input_reference": "event://normal-asset~6ca5b1ee26c5-000055",
+      "output_reference": "asset://asset~6ca5b1ee26c5"
+    },
+    {
+      "sequence": 0,
+      "audit_id": "audit-6e37ff6931e3",
+      "timestamp": "2026-01-08T00:03:00+00:00",
+      "layer": 0,
+      "layer_name": "Data Ingestion",
+      "actor": "layer0.ingestion",
+      "action": "observation.normalized",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "subject~5b742933679e -> network~b24fd0f837b8 via TCP (1000 bytes) in zone administration",
+      "input_reference": "synthetic://low_confidence/0",
+      "output_reference": "event://event~afc96dd02e6f"
+    },
+    {
+      "sequence": 2,
+      "audit_id": "audit-12acd1609da3",
+      "timestamp": "2026-01-08T01:00:00+00:00",
+      "layer": 2,
+      "layer_name": "ML Behavioral Model",
+      "actor": "layer2.model:layer2-baseline-v1",
+      "action": "finding.emitted",
+      "outcome": "success",
+      "record_class": "model_inference",
+      "summary": "Finding finding-000366-asset~6ca5b1ee26c5-202601080000 on asset~6ca5b1ee26c5: anomaly 0.3309, risk 0.3424, indicators [new_peer, off_hours, low_identity_confidence]",
+      "input_reference": "events://1-related",
+      "output_reference": "finding://finding-000366-asset~6ca5b1ee26c5-202601080000"
+    },
+    {
+      "sequence": 3,
+      "audit_id": "audit-9437e1158249",
+      "timestamp": "2026-09-05T14:23:58.936283+00:00",
+      "layer": 3,
+      "layer_name": "Multi-Agent Orchestration",
+      "actor": "layer3.orchestrator",
+      "action": "proposal.generated",
+      "outcome": "success",
+      "record_class": "model_inference",
+      "summary": "Case CASE-d093d780 proposes [COARSE_ISOLATION, MONITOR_ONLY] at approval level AUTO_APPROVED; LOW: Tier 3 non-clinical endpoint. Rapid isolation permitted by policy.",
+      "input_reference": "finding://finding-000366-asset~6ca5b1ee26c5-202601080000",
+      "output_reference": "case://CASE-d093d780"
+    },
+    {
+      "sequence": 4,
+      "audit_id": "audit-4634082ff37b",
+      "timestamp": "2026-09-05T14:23:58.936431+00:00",
+      "layer": 5,
+      "layer_name": "Decision Gate",
+      "actor": "layer5.reviewer:person~26756ab1746b",
+      "action": "decision.recorded",
+      "outcome": "success",
+      "record_class": "human_decision",
+      "summary": "Reviewer person~26756ab1746b recorded APPROVED for case CASE-d093d780 (scope 6344eed71f4790d1): Evidence supports containment; preserved flows verified against the care plan.",
+      "input_reference": "case://CASE-d093d780",
+      "output_reference": "decision://DEC-c6e7a71e"
+    },
+    {
+      "sequence": 5,
+      "audit_id": "audit-b8a6b4eb337d",
+      "timestamp": "2026-09-05T14:23:58.936458+00:00",
+      "layer": 4,
+      "layer_name": "Containment & Enforcement",
+      "actor": "layer4.enforcement",
+      "action": "enforcement.verified",
+      "outcome": "success",
+      "record_class": "action_taken",
+      "summary": "COARSE_ISOLATION on asset~6ca5b1ee26c5: 1 flow(s) blocked, 1 preserved, status VERIFIED",
+      "input_reference": "decision://DEC-c6e7a71e",
+      "output_reference": "action://ACT-1de7739e"
+    },
+    {
+      "sequence": 7,
+      "audit_id": "audit-6bddfed2e6e9",
+      "timestamp": "2026-09-05T14:23:58.936924+00:00",
+      "layer": 6,
+      "layer_name": "Compliance & Privacy",
+      "actor": "analyst:person~20ad4ba129f2",
+      "action": "annotation.added",
+      "outcome": "success",
+      "record_class": "human_decision",
+      "summary": "Analyst person~20ad4ba129f2 noted: Confirmed true positive. Endpoint reimaged; no patient data was accessed.",
+      "input_reference": "case://CASE-d093d780",
+      "output_reference": "annotation://ANN-29ff47be"
+    },
+    {
+      "sequence": 6,
+      "audit_id": "audit-6448f04d7142",
+      "timestamp": "2026-09-05T14:28:58.936458+00:00",
+      "layer": 4,
+      "layer_name": "Containment & Enforcement",
+      "actor": "layer4.enforcement",
+      "action": "enforcement.rolled_back",
+      "outcome": "rolled_back",
+      "record_class": "action_taken",
+      "summary": "Rollback RB-asset~6ca5b1ee26c5-53d19a on asset~6ca5b1ee26c5 (automatic_expiry)",
+      "input_reference": "action://ACT-1de7739e",
+      "output_reference": "rollback://RB-asset~6ca5b1ee26c5-53d19a"
+    }
+  ],
+  "buckets": {
+    "observed_fact": [
+      "audit-c7bb51a027f2",
+      "audit-6e37ff6931e3"
+    ],
+    "model_inference": [
+      "audit-12acd1609da3",
+      "audit-9437e1158249"
+    ],
+    "human_decision": [
+      "audit-4634082ff37b",
+      "audit-6bddfed2e6e9"
+    ],
+    "action_taken": [
+      "audit-b8a6b4eb337d",
+      "audit-6448f04d7142"
+    ]
+  },
+  "layer_coverage": {
+    "layer_1": 1,
+    "layer_0": 1,
+    "layer_2": 1,
+    "layer_3": 1,
+    "layer_5": 1,
+    "layer_4": 2,
+    "layer_6": 1
+  },
+  "chain_verification": {
+    "ok": true,
+    "records_checked": 10,
+    "head_hash": "358fab843a1f21106912e0916675ed0e830dc04ed5d46bb93332409cc7fce340",
+    "first_broken_sequence": null,
+    "reason": "chain intact"
+  }
+}

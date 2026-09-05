@@ -70,3 +70,53 @@ class ResponseProposal(BaseModel):
     approval_level: ApprovalLevel
     expiry_time: str
     rollback_plan: RollbackPlan
+
+# ---------------------------------------------------------------------------
+# Layer 6 handoff - "All layers -> Layer 6" audit event
+#
+# Every layer emits one of these for each meaningful step it takes. This is the
+# pydantic mirror of compliance/contracts.py::AuditEvent; both sides share one
+# JSON wire format, so a record produced here can be appended to the Layer 6
+# tamper-evident chain unchanged.
+# ---------------------------------------------------------------------------
+AUDIT_CONTRACT_VERSION = "accds-audit-v1"
+
+
+class RecordClass(str, Enum):
+    """Reports must keep these four apart and never blur them into one narrative."""
+    OBSERVED_FACT = "observed_fact"
+    MODEL_INFERENCE = "model_inference"
+    HUMAN_DECISION = "human_decision"
+    ACTION_TAKEN = "action_taken"
+
+
+class AuditOutcome(str, Enum):
+    SUCCESS = "success"
+    REJECTED = "rejected"
+    ESCALATED = "escalated"
+    EXPIRED = "expired"
+    ROLLED_BACK = "rolled_back"
+    DEGRADED = "degraded"
+    ERROR = "error"
+
+
+class AuditEvent(BaseModel):
+    """One immutable entry in the ACCDS chain of custody.
+
+    None of actor, timestamp, input_reference, output_reference or outcome may be
+    empty; the roadmap marks them as must-never-be-omitted for this handoff.
+    """
+    audit_id: str
+    timestamp: datetime
+    layer: int = Field(ge=0, le=6)
+    actor: str = Field(min_length=1)
+    action: str = Field(min_length=1)
+    outcome: AuditOutcome
+    record_class: RecordClass
+    input_reference: str = Field(min_length=1)
+    output_reference: str = Field(min_length=1)
+    case_id: Optional[str] = None
+    scenario_id: Optional[str] = None
+    asset_id: Optional[str] = None
+    payload: Dict[str, Any] = Field(default_factory=dict)
+    contract_version: str = AUDIT_CONTRACT_VERSION

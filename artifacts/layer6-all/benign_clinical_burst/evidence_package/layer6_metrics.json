@@ -1,0 +1,60 @@
+{
+  "chain_verification": {
+    "ok": true,
+    "records_checked": 14,
+    "head_hash": "961cfeb849aac0e8a5b19bff942eca37b2010a599f28b66a3e5b4759786c6494",
+    "first_broken_sequence": null,
+    "reason": "chain intact"
+  },
+  "privacy": {
+    "records_redacted": 12,
+    "fields_kept": 13,
+    "fields_pseudonymized": 49,
+    "fields_masked": 0,
+    "fields_dropped": 5,
+    "fields_generalized": 1,
+    "free_text_substitutions": 20,
+    "sensitive_instances_handled": 75,
+    "leak_scan": {
+      "records_scanned": 12,
+      "terms_checked": 26,
+      "leaked_terms": [],
+      "leak_count": 0,
+      "clean": true
+    },
+    "operational_records_correctly_redacted": 1.0
+  },
+  "audit_completeness": {
+    "records": 12,
+    "records_with_all_required_fields": 12,
+    "field_completeness": 1.0,
+    "missing_field_counts": {},
+    "layers_present": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "layers_missing": [],
+    "layer_coverage": 1.0,
+    "records_by_class": {
+      "observed_fact": 6,
+      "model_inference": 2,
+      "human_decision": 2,
+      "action_taken": 2
+    }
+  },
+  "explainability": {
+    "records": 12,
+    "records_traceable_to_source": 12,
+    "traceability": 1.0
+  },
+  "store": {
+    "path": "artifacts/layer6-all/benign_clinical_burst/audit_chain.jsonl",
+    "records": 14,
+    "head_hash": "961cfeb849aac0e8a5b19bff942eca37b2010a599f28b66a3e5b4759786c6494"
+  }
+}
