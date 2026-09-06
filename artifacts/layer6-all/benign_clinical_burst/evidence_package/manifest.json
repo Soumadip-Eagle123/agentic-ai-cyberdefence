@@ -1,0 +1,50 @@
+{
+  "package_id": "EVID-CASE-75fd179d",
+  "case_id": "CASE-75fd179d",
+  "scenario_id": "benign_clinical_burst",
+  "generated_at": "2026-09-05T14:23:58.866351+00:00",
+  "contract_version": "accds-audit-v1",
+  "view": "operational",
+  "contains_forensic_records": true,
+  "audit_chain": {
+    "ok": true,
+    "records_checked": 14,
+    "head_hash": "961cfeb849aac0e8a5b19bff942eca37b2010a599f28b66a3e5b4759786c6494",
+    "first_broken_sequence": null,
+    "reason": "chain intact",
+    "store_path": "artifacts/layer6-all/benign_clinical_burst/audit_chain.jsonl",
+    "store_records": 14
+  },
+  "files": [
+    {
+      "name": "incident_timeline.json",
+      "bytes": 8000,
+      "sha256": "721383f9cdc068d443ce24c2a8358a62672f78d9c30a1660cccc1d99baf7403f"
+    },
+    {
+      "name": "operational_view.jsonl",
+      "bytes": 13785,
+      "sha256": "94f9f3dee4da6e044524495a4875d517695882aa22144d58ffd7f47e1fb2a042"
+    },
+    {
+      "name": "forensic_records.jsonl",
+      "bytes": 13849,
+      "sha256": "c7f266ad4dd86414a8533fd6ab828267d385e287fade9d4d513a652dd13fb81b"
+    },
+    {
+      "name": "layer6_metrics.json",
+      "bytes": 1427,
+      "sha256": "aa5c37ce978239b25eeca64a70810aaeb29ec63e007eecccd02a62814cb3bb8d"
+    },
+    {
+      "name": "RPT-CASE-75fd179d.md",
+      "bytes": 3871,
+      "sha256": "b3dc556f8a495f16796ee8713bdfce6f2b261489b8eb5a2c459b88a528905d85"
+    },
+    {
+      "name": "RPT-CASE-75fd179d.json",
+      "bytes": 9970,
+      "sha256": "ac67f6cb4b12c59fea050611a80e5ab6548819370f8d3027b2c9a7a0d129651d"
+    }
+  ]
+}

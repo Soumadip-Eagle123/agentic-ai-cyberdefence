@@ -1,0 +1,60 @@
+{
+  "chain_verification": {
+    "ok": true,
+    "records_checked": 21,
+    "head_hash": "760e602856cdb839263e3bb6c17ab90586b952a71615ed77c590b998b9a736fa",
+    "first_broken_sequence": null,
+    "reason": "chain intact"
+  },
+  "privacy": {
+    "records_redacted": 19,
+    "fields_kept": 20,
+    "fields_pseudonymized": 91,
+    "fields_masked": 0,
+    "fields_dropped": 12,
+    "fields_generalized": 1,
+    "free_text_substitutions": 27,
+    "sensitive_instances_handled": 131,
+    "leak_scan": {
+      "records_scanned": 19,
+      "terms_checked": 52,
+      "leaked_terms": [],
+      "leak_count": 0,
+      "clean": true
+    },
+    "operational_records_correctly_redacted": 1.0
+  },
+  "audit_completeness": {
+    "records": 19,
+    "records_with_all_required_fields": 19,
+    "field_completeness": 1.0,
+    "missing_field_counts": {},
+    "layers_present": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "layers_missing": [],
+    "layer_coverage": 1.0,
+    "records_by_class": {
+      "observed_fact": 13,
+      "model_inference": 2,
+      "human_decision": 2,
+      "action_taken": 2
+    }
+  },
+  "explainability": {
+    "records": 19,
+    "records_traceable_to_source": 19,
+    "traceability": 1.0
+  },
+  "store": {
+    "path": "artifacts/layer6-all/diagnostic_drift/audit_chain.jsonl",
+    "records": 21,
+    "head_hash": "760e602856cdb839263e3bb6c17ab90586b952a71615ed77c590b998b9a736fa"
+  }
+}

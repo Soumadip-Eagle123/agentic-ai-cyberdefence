@@ -1,0 +1,214 @@
+{
+  "case_id": "CASE-75fd179d",
+  "scenario_id": "benign_clinical_burst",
+  "view": "operational",
+  "generated_at": "2026-09-05T14:23:58.860804+00:00",
+  "entries": [
+    {
+      "sequence": 5,
+      "audit_id": "audit-4cb81d8e7bcd",
+      "timestamp": "2026-01-05T00:34:00+00:00",
+      "layer": 1,
+      "layer_name": "Asset Intelligence",
+      "actor": "layer1.asset_intelligence",
+      "action": "asset.context.resolved",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "Asset asset~d104b563d26c identified as patient_monitor_gateway in intensive_care, clinical tier 1, identity confidence 1.0",
+      "input_reference": "event://normal-asset~d104b563d26c-000001",
+      "output_reference": "asset://asset~d104b563d26c"
+    },
+    {
+      "sequence": 0,
+      "audit_id": "audit-4f268f57e19f",
+      "timestamp": "2026-01-08T00:03:00+00:00",
+      "layer": 0,
+      "layer_name": "Data Ingestion",
+      "actor": "layer0.ingestion",
+      "action": "observation.normalized",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "subject~4f84e73aed21 -> network~496d9e10539a via TCP (120115 bytes) in zone intensive_care",
+      "input_reference": "synthetic://benign_clinical_burst/0",
+      "output_reference": "event://event~ea9ddd85571d"
+    },
+    {
+      "sequence": 1,
+      "audit_id": "audit-ff968c190e56",
+      "timestamp": "2026-01-08T00:04:00+00:00",
+      "layer": 0,
+      "layer_name": "Data Ingestion",
+      "actor": "layer0.ingestion",
+      "action": "observation.normalized",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "subject~4f84e73aed21 -> network~496d9e10539a via TCP (120760 bytes) in zone intensive_care",
+      "input_reference": "synthetic://benign_clinical_burst/1",
+      "output_reference": "event://event~1886d3adafe9"
+    },
+    {
+      "sequence": 2,
+      "audit_id": "audit-db4e74626de3",
+      "timestamp": "2026-01-08T00:05:00+00:00",
+      "layer": 0,
+      "layer_name": "Data Ingestion",
+      "actor": "layer0.ingestion",
+      "action": "observation.normalized",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "subject~4f84e73aed21 -> network~496d9e10539a via TCP (120133 bytes) in zone intensive_care",
+      "input_reference": "synthetic://benign_clinical_burst/2",
+      "output_reference": "event://event~1992d744e811"
+    },
+    {
+      "sequence": 3,
+      "audit_id": "audit-c676c971384f",
+      "timestamp": "2026-01-08T00:06:00+00:00",
+      "layer": 0,
+      "layer_name": "Data Ingestion",
+      "actor": "layer0.ingestion",
+      "action": "observation.normalized",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "subject~4f84e73aed21 -> network~496d9e10539a via TCP (120558 bytes) in zone intensive_care",
+      "input_reference": "synthetic://benign_clinical_burst/3",
+      "output_reference": "event://event~cf55600195ff"
+    },
+    {
+      "sequence": 4,
+      "audit_id": "audit-ae621a11092c",
+      "timestamp": "2026-01-08T00:07:00+00:00",
+      "layer": 0,
+      "layer_name": "Data Ingestion",
+      "actor": "layer0.ingestion",
+      "action": "observation.normalized",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "subject~4f84e73aed21 -> network~496d9e10539a via TCP (120611 bytes) in zone intensive_care",
+      "input_reference": "synthetic://benign_clinical_burst/4",
+      "output_reference": "event://event~c494eae29599"
+    },
+    {
+      "sequence": 6,
+      "audit_id": "audit-3873ccdb29c0",
+      "timestamp": "2026-01-08T01:00:00+00:00",
+      "layer": 2,
+      "layer_name": "ML Behavioral Model",
+      "actor": "layer2.model:layer2-baseline-v1",
+      "action": "finding.emitted",
+      "outcome": "success",
+      "record_class": "model_inference",
+      "summary": "Finding finding-000255-asset~d104b563d26c-202601080000 on asset~d104b563d26c: anomaly 0.2557, risk 0.2764, indicators [off_hours]",
+      "input_reference": "events://5-related",
+      "output_reference": "finding://finding-000255-asset~d104b563d26c-202601080000"
+    },
+    {
+      "sequence": 7,
+      "audit_id": "audit-c5475828b16c",
+      "timestamp": "2026-09-05T14:23:58.850133+00:00",
+      "layer": 3,
+      "layer_name": "Multi-Agent Orchestration",
+      "actor": "layer3.orchestrator",
+      "action": "proposal.generated",
+      "outcome": "escalated",
+      "record_class": "model_inference",
+      "summary": "Case CASE-75fd179d proposes [SURGICAL_BLOCK, MONITOR_ONLY] at approval level REQUIRES_HUMAN_APPROVAL; CRITICAL: Tier 1 patient_monitor_gateway. Clinical flows must be preserved.",
+      "input_reference": "finding://finding-000255-asset~d104b563d26c-202601080000",
+      "output_reference": "case://CASE-75fd179d"
+    },
+    {
+      "sequence": 8,
+      "audit_id": "audit-b1644411ab11",
+      "timestamp": "2026-09-05T14:23:58.850340+00:00",
+      "layer": 5,
+      "layer_name": "Decision Gate",
+      "actor": "layer5.reviewer:person~26756ab1746b",
+      "action": "decision.recorded",
+      "outcome": "success",
+      "record_class": "human_decision",
+      "summary": "Reviewer person~26756ab1746b recorded APPROVED for case CASE-75fd179d (scope e6a6393444d780cc): Evidence supports containment; preserved flows verified against the care plan.",
+      "input_reference": "case://CASE-75fd179d",
+      "output_reference": "decision://DEC-503d88dd"
+    },
+    {
+      "sequence": 9,
+      "audit_id": "audit-2710b5ae5819",
+      "timestamp": "2026-09-05T14:23:58.850362+00:00",
+      "layer": 4,
+      "layer_name": "Containment & Enforcement",
+      "actor": "layer4.enforcement",
+      "action": "enforcement.verified",
+      "outcome": "success",
+      "record_class": "action_taken",
+      "summary": "SURGICAL_BLOCK on asset~d104b563d26c: 1 flow(s) blocked, 1 preserved, status VERIFIED",
+      "input_reference": "decision://DEC-503d88dd",
+      "output_reference": "action://ACT-30c637c5"
+    },
+    {
+      "sequence": 11,
+      "audit_id": "audit-70b1a767bc6d",
+      "timestamp": "2026-09-05T14:23:58.850391+00:00",
+      "layer": 6,
+      "layer_name": "Compliance & Privacy",
+      "actor": "analyst:person~20ad4ba129f2",
+      "action": "annotation.added",
+      "outcome": "success",
+      "record_class": "human_decision",
+      "summary": "Analyst person~20ad4ba129f2 noted: Confirmed true positive. Endpoint reimaged; no patient data was accessed.",
+      "input_reference": "case://CASE-75fd179d",
+      "output_reference": "annotation://ANN-8a2b135c"
+    },
+    {
+      "sequence": 10,
+      "audit_id": "audit-4b6662db1b2b",
+      "timestamp": "2026-09-05T14:28:58.850362+00:00",
+      "layer": 4,
+      "layer_name": "Containment & Enforcement",
+      "actor": "layer4.enforcement",
+      "action": "enforcement.rolled_back",
+      "outcome": "rolled_back",
+      "record_class": "action_taken",
+      "summary": "Rollback RB-asset~d104b563d26c-0dddcd on asset~d104b563d26c (automatic_expiry)",
+      "input_reference": "action://ACT-30c637c5",
+      "output_reference": "rollback://RB-asset~d104b563d26c-0dddcd"
+    }
+  ],
+  "buckets": {
+    "observed_fact": [
+      "audit-4cb81d8e7bcd",
+      "audit-4f268f57e19f",
+      "audit-ff968c190e56",
+      "audit-db4e74626de3",
+      "audit-c676c971384f",
+      "audit-ae621a11092c"
+    ],
+    "model_inference": [
+      "audit-3873ccdb29c0",
+      "audit-c5475828b16c"
+    ],
+    "human_decision": [
+      "audit-b1644411ab11",
+      "audit-70b1a767bc6d"
+    ],
+    "action_taken": [
+      "audit-2710b5ae5819",
+      "audit-4b6662db1b2b"
+    ]
+  },
+  "layer_coverage": {
+    "layer_1": 1,
+    "layer_0": 5,
+    "layer_2": 1,
+    "layer_3": 1,
+    "layer_5": 1,
+    "layer_4": 2,
+    "layer_6": 1
+  },
+  "chain_verification": {
+    "ok": true,
+    "records_checked": 14,
+    "head_hash": "961cfeb849aac0e8a5b19bff942eca37b2010a599f28b66a3e5b4759786c6494",
+    "first_broken_sequence": null,
+    "reason": "chain intact"
+  }
+}

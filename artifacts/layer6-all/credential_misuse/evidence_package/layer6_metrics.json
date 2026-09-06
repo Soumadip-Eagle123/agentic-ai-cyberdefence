@@ -1,0 +1,60 @@
+{
+  "chain_verification": {
+    "ok": true,
+    "records_checked": 16,
+    "head_hash": "f2a5b9729a9d8328de53daf299c9dbdd075e47abe211c7af0ff1be284117d24f",
+    "first_broken_sequence": null,
+    "reason": "chain intact"
+  },
+  "privacy": {
+    "records_redacted": 14,
+    "fields_kept": 15,
+    "fields_pseudonymized": 61,
+    "fields_masked": 0,
+    "fields_dropped": 7,
+    "fields_generalized": 1,
+    "free_text_substitutions": 22,
+    "sensitive_instances_handled": 91,
+    "leak_scan": {
+      "records_scanned": 14,
+      "terms_checked": 30,
+      "leaked_terms": [],
+      "leak_count": 0,
+      "clean": true
+    },
+    "operational_records_correctly_redacted": 1.0
+  },
+  "audit_completeness": {
+    "records": 14,
+    "records_with_all_required_fields": 14,
+    "field_completeness": 1.0,
+    "missing_field_counts": {},
+    "layers_present": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "layers_missing": [],
+    "layer_coverage": 1.0,
+    "records_by_class": {
+      "observed_fact": 8,
+      "model_inference": 2,
+      "human_decision": 2,
+      "action_taken": 2
+    }
+  },
+  "explainability": {
+    "records": 14,
+    "records_traceable_to_source": 14,
+    "traceability": 1.0
+  },
+  "store": {
+    "path": "artifacts/layer6-all/credential_misuse/audit_chain.jsonl",
+    "records": 16,
+    "head_hash": "f2a5b9729a9d8328de53daf299c9dbdd075e47abe211c7af0ff1be284117d24f"
+  }
+}

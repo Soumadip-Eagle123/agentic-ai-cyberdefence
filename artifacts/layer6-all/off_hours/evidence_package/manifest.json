@@ -1,0 +1,50 @@
+{
+  "package_id": "EVID-CASE-f4d30b9e",
+  "case_id": "CASE-f4d30b9e",
+  "scenario_id": "off_hours",
+  "generated_at": "2026-09-05T14:23:58.684894+00:00",
+  "contract_version": "accds-audit-v1",
+  "view": "operational",
+  "contains_forensic_records": true,
+  "audit_chain": {
+    "ok": true,
+    "records_checked": 12,
+    "head_hash": "037b8bfe61b30aa5f6b1d1e0d6b69935c7a104a1b8506e5cd33ee89feec67fe0",
+    "first_broken_sequence": null,
+    "reason": "chain intact",
+    "store_path": "artifacts/layer6-all/off_hours/audit_chain.jsonl",
+    "store_records": 12
+  },
+  "files": [
+    {
+      "name": "incident_timeline.json",
+      "bytes": 6762,
+      "sha256": "ac77f3235fd15feb7ea081ee6358f3fb7cb5a209ce37de0484fd5311d5986e4b"
+    },
+    {
+      "name": "operational_view.jsonl",
+      "bytes": 11791,
+      "sha256": "4800046757d89fec9de296cc78fe042389e2d1807595753d7d11ca4ea29b0f07"
+    },
+    {
+      "name": "forensic_records.jsonl",
+      "bytes": 11409,
+      "sha256": "886de65a0f685036b6e45119fd7e978fa672aa5aaa82f9be2426cef8213bfed1"
+    },
+    {
+      "name": "layer6_metrics.json",
+      "bytes": 1415,
+      "sha256": "b9f312e752650cadbc35b372507d95c2c878514985f1dae5f0e2269d54478b67"
+    },
+    {
+      "name": "RPT-CASE-f4d30b9e.md",
+      "bytes": 3519,
+      "sha256": "39445445ce7c901d0913589a42260507289e28b43e5865ed05f04c50863789f8"
+    },
+    {
+      "name": "RPT-CASE-f4d30b9e.json",
+      "bytes": 8708,
+      "sha256": "6ef10e68b54ee20aff279c4cb0fdd983d06eff6f1a1e7cd9e8c8ac44b7a55207"
+    }
+  ]
+}

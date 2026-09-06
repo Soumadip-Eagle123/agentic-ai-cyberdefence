@@ -1,0 +1,50 @@
+{
+  "package_id": "EVID-CASE-2262f197",
+  "case_id": "CASE-2262f197",
+  "scenario_id": "credential_misuse",
+  "generated_at": "2026-09-05T14:23:58.595956+00:00",
+  "contract_version": "accds-audit-v1",
+  "view": "operational",
+  "contains_forensic_records": true,
+  "audit_chain": {
+    "ok": true,
+    "records_checked": 16,
+    "head_hash": "f2a5b9729a9d8328de53daf299c9dbdd075e47abe211c7af0ff1be284117d24f",
+    "first_broken_sequence": null,
+    "reason": "chain intact",
+    "store_path": "artifacts/layer6-all/credential_misuse/audit_chain.jsonl",
+    "store_records": 16
+  },
+  "files": [
+    {
+      "name": "incident_timeline.json",
+      "bytes": 9098,
+      "sha256": "4123b14e4a89086007ebb05c68b36510eadd78000d6a0b01c3dc3621a3794bbf"
+    },
+    {
+      "name": "operational_view.jsonl",
+      "bytes": 15658,
+      "sha256": "d7efe4f5c5d9e7d995afb653dd80fd1fae6caefddec3c393bddc51eb8216e34a"
+    },
+    {
+      "name": "forensic_records.jsonl",
+      "bytes": 15324,
+      "sha256": "412b8faab813570ba2aaf40515ad831e98629dee6bb65855e89efe046c406d2b"
+    },
+    {
+      "name": "layer6_metrics.json",
+      "bytes": 1423,
+      "sha256": "a202cfeb7fba905300fc40ca533d963c9079459363f35ec8865910f3b19be4e5"
+    },
+    {
+      "name": "RPT-CASE-2262f197.md",
+      "bytes": 4147,
+      "sha256": "e628af0ad0ebeafbe03841413ce0532978e1734a1cb3bed17aeeb823bec37933"
+    },
+    {
+      "name": "RPT-CASE-2262f197.json",
+      "bytes": 11060,
+      "sha256": "ba32867bb74f73765e7e40938c713ab72e68d7421d76f08ce8b14ef13b90c9cf"
+    }
+  ]
+}

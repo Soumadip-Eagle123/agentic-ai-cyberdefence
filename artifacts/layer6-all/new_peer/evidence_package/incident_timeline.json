@@ -1,0 +1,184 @@
+{
+  "case_id": "CASE-742f7ce7",
+  "scenario_id": "new_peer",
+  "view": "operational",
+  "generated_at": "2026-09-05T14:23:58.411913+00:00",
+  "entries": [
+    {
+      "sequence": 3,
+      "audit_id": "audit-a23d3523f77c",
+      "timestamp": "2026-01-05T00:05:00+00:00",
+      "layer": 1,
+      "layer_name": "Asset Intelligence",
+      "actor": "layer1.asset_intelligence",
+      "action": "asset.context.resolved",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "Asset asset~fa3afe4f64a2 identified as laboratory_server in laboratory, clinical tier 2, identity confidence 1.0",
+      "input_reference": "event://normal-asset~fa3afe4f64a2-000004",
+      "output_reference": "asset://asset~fa3afe4f64a2"
+    },
+    {
+      "sequence": 0,
+      "audit_id": "audit-621bd311cacc",
+      "timestamp": "2026-01-08T00:03:00+00:00",
+      "layer": 0,
+      "layer_name": "Data Ingestion",
+      "actor": "layer0.ingestion",
+      "action": "observation.normalized",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "subject~0c652c210013 -> network~71a3e49e677b via TCP (1200 bytes) in zone laboratory",
+      "input_reference": "synthetic://new_peer/0",
+      "output_reference": "event://event~cf3aec1e0017"
+    },
+    {
+      "sequence": 1,
+      "audit_id": "audit-74637fa0b946",
+      "timestamp": "2026-01-08T00:04:00+00:00",
+      "layer": 0,
+      "layer_name": "Data Ingestion",
+      "actor": "layer0.ingestion",
+      "action": "observation.normalized",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "subject~0c652c210013 -> network~71a3e49e677b via TCP (1200 bytes) in zone laboratory",
+      "input_reference": "synthetic://new_peer/1",
+      "output_reference": "event://event~1490ff27aa76"
+    },
+    {
+      "sequence": 2,
+      "audit_id": "audit-74810a17e564",
+      "timestamp": "2026-01-08T00:05:00+00:00",
+      "layer": 0,
+      "layer_name": "Data Ingestion",
+      "actor": "layer0.ingestion",
+      "action": "observation.normalized",
+      "outcome": "success",
+      "record_class": "observed_fact",
+      "summary": "subject~0c652c210013 -> network~71a3e49e677b via TCP (1200 bytes) in zone laboratory",
+      "input_reference": "synthetic://new_peer/2",
+      "output_reference": "event://event~835c65e33149"
+    },
+    {
+      "sequence": 4,
+      "audit_id": "audit-99baba309544",
+      "timestamp": "2026-01-08T01:00:00+00:00",
+      "layer": 2,
+      "layer_name": "ML Behavioral Model",
+      "actor": "layer2.model:layer2-baseline-v1",
+      "action": "finding.emitted",
+      "outcome": "success",
+      "record_class": "model_inference",
+      "summary": "Finding finding-000327-asset~fa3afe4f64a2-202601080000 on asset~fa3afe4f64a2: anomaly 0.58, risk 0.6037, indicators [new_peer, off_hours]",
+      "input_reference": "events://3-related",
+      "output_reference": "finding://finding-000327-asset~fa3afe4f64a2-202601080000"
+    },
+    {
+      "sequence": 5,
+      "audit_id": "audit-792379e66b50",
+      "timestamp": "2026-09-05T14:23:58.402699+00:00",
+      "layer": 3,
+      "layer_name": "Multi-Agent Orchestration",
+      "actor": "layer3.orchestrator",
+      "action": "proposal.generated",
+      "outcome": "success",
+      "record_class": "model_inference",
+      "summary": "Case CASE-742f7ce7 proposes [SCOPED_BLOCK, MONITOR_ONLY] at approval level AUTO_APPROVED; MODERATE: Tier 2 clinical system. Narrow containment with controlled fallback.",
+      "input_reference": "finding://finding-000327-asset~fa3afe4f64a2-202601080000",
+      "output_reference": "case://CASE-742f7ce7"
+    },
+    {
+      "sequence": 6,
+      "audit_id": "audit-aaaa748f7f54",
+      "timestamp": "2026-09-05T14:23:58.402868+00:00",
+      "layer": 5,
+      "layer_name": "Decision Gate",
+      "actor": "layer5.reviewer:person~26756ab1746b",
+      "action": "decision.recorded",
+      "outcome": "success",
+      "record_class": "human_decision",
+      "summary": "Reviewer person~26756ab1746b recorded APPROVED for case CASE-742f7ce7 (scope 1ec0342707e0e059): Evidence supports containment; preserved flows verified against the care plan.",
+      "input_reference": "case://CASE-742f7ce7",
+      "output_reference": "decision://DEC-24c39288"
+    },
+    {
+      "sequence": 7,
+      "audit_id": "audit-fd40ec9858be",
+      "timestamp": "2026-09-05T14:23:58.402890+00:00",
+      "layer": 4,
+      "layer_name": "Containment & Enforcement",
+      "actor": "layer4.enforcement",
+      "action": "enforcement.verified",
+      "outcome": "success",
+      "record_class": "action_taken",
+      "summary": "SCOPED_BLOCK on asset~fa3afe4f64a2: 1 flow(s) blocked, 1 preserved, status VERIFIED",
+      "input_reference": "decision://DEC-24c39288",
+      "output_reference": "action://ACT-519e48b8"
+    },
+    {
+      "sequence": 9,
+      "audit_id": "audit-d4d2fb00eb63",
+      "timestamp": "2026-09-05T14:23:58.403361+00:00",
+      "layer": 6,
+      "layer_name": "Compliance & Privacy",
+      "actor": "analyst:person~20ad4ba129f2",
+      "action": "annotation.added",
+      "outcome": "success",
+      "record_class": "human_decision",
+      "summary": "Analyst person~20ad4ba129f2 noted: Confirmed true positive. Endpoint reimaged; no patient data was accessed.",
+      "input_reference": "case://CASE-742f7ce7",
+      "output_reference": "annotation://ANN-e187f812"
+    },
+    {
+      "sequence": 8,
+      "audit_id": "audit-b3e9a430b420",
+      "timestamp": "2026-09-05T14:28:58.402890+00:00",
+      "layer": 4,
+      "layer_name": "Containment & Enforcement",
+      "actor": "layer4.enforcement",
+      "action": "enforcement.rolled_back",
+      "outcome": "rolled_back",
+      "record_class": "action_taken",
+      "summary": "Rollback RB-asset~fa3afe4f64a2-5f3f23 on asset~fa3afe4f64a2 (automatic_expiry)",
+      "input_reference": "action://ACT-519e48b8",
+      "output_reference": "rollback://RB-asset~fa3afe4f64a2-5f3f23"
+    }
+  ],
+  "buckets": {
+    "observed_fact": [
+      "audit-a23d3523f77c",
+      "audit-621bd311cacc",
+      "audit-74637fa0b946",
+      "audit-74810a17e564"
+    ],
+    "model_inference": [
+      "audit-99baba309544",
+      "audit-792379e66b50"
+    ],
+    "human_decision": [
+      "audit-aaaa748f7f54",
+      "audit-d4d2fb00eb63"
+    ],
+    "action_taken": [
+      "audit-fd40ec9858be",
+      "audit-b3e9a430b420"
+    ]
+  },
+  "layer_coverage": {
+    "layer_1": 1,
+    "layer_0": 3,
+    "layer_2": 1,
+    "layer_3": 1,
+    "layer_5": 1,
+    "layer_4": 2,
+    "layer_6": 1
+  },
+  "chain_verification": {
+    "ok": true,
+    "records_checked": 12,
+    "head_hash": "15fc1f2cf26e432d3906669e1d9e27785fa8af34eb44a9a0b472c32e8352988c",
+    "first_broken_sequence": null,
+    "reason": "chain intact"
+  }
+}
