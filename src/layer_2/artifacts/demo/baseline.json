@@ -1,0 +1,773 @@
+{
+  "asset_stats": {
+    "ehr-core": {
+      "bytes_per_peer": {
+        "mad": 216.5,
+        "median": 1770.0,
+        "p05": 1356.0,
+        "p95": 2247.0
+      },
+      "event_count": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "failed_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_service_ratio": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "off_hours_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 1.0
+      },
+      "port_fanout": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "protocol_diversity": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "successful_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "total_bytes": {
+        "mad": 216.5,
+        "median": 1770.0,
+        "p05": 1356.0,
+        "p95": 2247.0
+      },
+      "unapproved_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "unique_peers": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      }
+    },
+    "guest-device": {
+      "bytes_per_peer": {
+        "mad": 52.0,
+        "median": 523.0,
+        "p05": 388.0,
+        "p95": 625.0
+      },
+      "event_count": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "failed_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_service_ratio": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "off_hours_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "port_fanout": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "protocol_diversity": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "successful_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "total_bytes": {
+        "mad": 52.0,
+        "median": 523.0,
+        "p05": 388.0,
+        "p95": 625.0
+      },
+      "unapproved_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "unique_peers": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      }
+    },
+    "icu-controller": {
+      "bytes_per_peer": {
+        "mad": 466.0,
+        "median": 1491.0,
+        "p05": 720.0,
+        "p95": 2174.0
+      },
+      "event_count": {
+        "mad": 0.0,
+        "median": 2.0,
+        "p05": 2.0,
+        "p95": 2.0
+      },
+      "failed_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_service_ratio": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "off_hours_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 1.0
+      },
+      "port_fanout": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 2.0
+      },
+      "protocol_diversity": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "successful_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "total_bytes": {
+        "mad": 162.5,
+        "median": 1770.5,
+        "p05": 1440.0,
+        "p95": 2227.0
+      },
+      "unapproved_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "unique_peers": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 2.0
+      }
+    },
+    "icu-monitor-gw": {
+      "bytes_per_peer": {
+        "mad": 289.5,
+        "median": 1015.0,
+        "p05": 714.5,
+        "p95": 2167.0
+      },
+      "event_count": {
+        "mad": 0.0,
+        "median": 2.0,
+        "p05": 2.0,
+        "p95": 2.0
+      },
+      "failed_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_service_ratio": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "off_hours_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 1.0
+      },
+      "port_fanout": {
+        "mad": 0.0,
+        "median": 2.0,
+        "p05": 1.0,
+        "p95": 2.0
+      },
+      "protocol_diversity": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "successful_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "total_bytes": {
+        "mad": 142.0,
+        "median": 1777.0,
+        "p05": 1429.0,
+        "p95": 2167.0
+      },
+      "unapproved_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "unique_peers": {
+        "mad": 0.0,
+        "median": 2.0,
+        "p05": 1.0,
+        "p95": 2.0
+      }
+    },
+    "lab-server": {
+      "bytes_per_peer": {
+        "mad": 270.0,
+        "median": 1781.5,
+        "p05": 1350.0,
+        "p95": 2242.0
+      },
+      "event_count": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "failed_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_service_ratio": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "off_hours_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 1.0
+      },
+      "port_fanout": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "protocol_diversity": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "successful_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "total_bytes": {
+        "mad": 270.0,
+        "median": 1781.5,
+        "p05": 1350.0,
+        "p95": 2242.0
+      },
+      "unapproved_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "unique_peers": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      }
+    },
+    "office-ws": {
+      "bytes_per_peer": {
+        "mad": 66.0,
+        "median": 500.0,
+        "p05": 375.0,
+        "p95": 624.0
+      },
+      "event_count": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "failed_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_service_ratio": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "off_hours_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "port_fanout": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "protocol_diversity": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "successful_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "total_bytes": {
+        "mad": 66.0,
+        "median": 500.0,
+        "p05": 375.0,
+        "p95": 624.0
+      },
+      "unapproved_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "unique_peers": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      }
+    },
+    "radiology-ws": {
+      "bytes_per_peer": {
+        "mad": 230.5,
+        "median": 1727.0,
+        "p05": 1355.0,
+        "p95": 2243.0
+      },
+      "event_count": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "failed_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_service_ratio": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "off_hours_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 1.0
+      },
+      "port_fanout": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "protocol_diversity": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "successful_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "total_bytes": {
+        "mad": 230.5,
+        "median": 1727.0,
+        "p05": 1355.0,
+        "p95": 2243.0
+      },
+      "unapproved_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "unique_peers": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      }
+    }
+  },
+  "config_hash": "d3c0a0397d6b6d1f7731325eba4e5bb71085961fffac2894ce7bb9bbff018015",
+  "created_at": "2026-09-05T09:44:55.396969+00:00",
+  "feature_names": [
+    "event_count",
+    "unique_peers",
+    "port_fanout",
+    "total_bytes",
+    "bytes_per_peer",
+    "failed_auth",
+    "successful_auth",
+    "off_hours_ratio",
+    "new_peer_ratio",
+    "new_service_ratio",
+    "unapproved_peer_ratio",
+    "protocol_diversity"
+  ],
+  "peer_stats": {
+    "1": {
+      "bytes_per_peer": {
+        "mad": 419.75,
+        "median": 1292.25,
+        "p05": 714.5,
+        "p95": 2174.0
+      },
+      "event_count": {
+        "mad": 0.0,
+        "median": 2.0,
+        "p05": 2.0,
+        "p95": 2.0
+      },
+      "failed_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_service_ratio": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "off_hours_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 1.0
+      },
+      "port_fanout": {
+        "mad": 0.5,
+        "median": 1.5,
+        "p05": 1.0,
+        "p95": 2.0
+      },
+      "protocol_diversity": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "successful_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "total_bytes": {
+        "mad": 144.5,
+        "median": 1772.0,
+        "p05": 1429.0,
+        "p95": 2227.0
+      },
+      "unapproved_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "unique_peers": {
+        "mad": 0.5,
+        "median": 1.5,
+        "p05": 1.0,
+        "p95": 2.0
+      }
+    },
+    "2": {
+      "bytes_per_peer": {
+        "mad": 246.5,
+        "median": 1755.5,
+        "p05": 1350.0,
+        "p95": 2247.0
+      },
+      "event_count": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "failed_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_service_ratio": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "off_hours_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 1.0
+      },
+      "port_fanout": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "protocol_diversity": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "successful_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "total_bytes": {
+        "mad": 246.5,
+        "median": 1755.5,
+        "p05": 1350.0,
+        "p95": 2247.0
+      },
+      "unapproved_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "unique_peers": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      }
+    },
+    "3": {
+      "bytes_per_peer": {
+        "mad": 63.5,
+        "median": 506.5,
+        "p05": 375.0,
+        "p95": 625.0
+      },
+      "event_count": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "failed_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "new_service_ratio": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "off_hours_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "port_fanout": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "protocol_diversity": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      },
+      "successful_auth": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "total_bytes": {
+        "mad": 63.5,
+        "median": 506.5,
+        "p05": 375.0,
+        "p95": 625.0
+      },
+      "unapproved_peer_ratio": {
+        "mad": 0.0,
+        "median": 0.0,
+        "p05": 0.0,
+        "p95": 0.0
+      },
+      "unique_peers": {
+        "mad": 0.0,
+        "median": 1.0,
+        "p05": 1.0,
+        "p95": 1.0
+      }
+    }
+  },
+  "source_fingerprint": "6673b3dba291555c4f06c4231defd7135bfde04d77ac423105f2e32fc1606849",
+  "thresholds": {
+    "anomaly": 0.55,
+    "high_anomaly": 0.75
+  },
+  "version": "layer2-baseline-v1",
+  "weights": {
+    "peer": 0.25,
+    "rules": 0.2,
+    "statistical": 0.55
+  }
+}
