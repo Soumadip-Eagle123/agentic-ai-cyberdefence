@@ -36,10 +36,18 @@ def summarize(event_payload: Dict[str, Any], action: str, layer: int) -> str:
             f"identity confidence {get('identity_confidence')}"
         )
     if layer == 2:
-        indicators = ", ".join(item.get("code", "?") for item in (get("indicators") or []))
+        raw_indicators = get("indicators") or []
+        parsed_indicators = []
+        for item in raw_indicators:
+            if isinstance(item, dict):
+                parsed_indicators.append(item.get("code", "?"))
+            else:
+                parsed_indicators.append(str(item))
+        
+        indicators_str = ", ".join(parsed_indicators)
         return (
             f"Finding {get('finding_id')} on {get('asset_id')}: anomaly "
-            f"{get('anomaly_score')}, risk {get('risk_score')}, indicators [{indicators}]"
+            f"{get('anomaly_score')}, risk {get('risk_score')}, indicators [{indicators_str}]"
         )
     if layer == 3:
         actions = ", ".join(item.get("action_type", "?") for item in (get("candidate_actions") or []))

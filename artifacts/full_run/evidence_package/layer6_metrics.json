@@ -1,0 +1,60 @@
+{
+  "chain_verification": {
+    "ok": true,
+    "records_checked": 57,
+    "head_hash": "485f345b8166ea62be5ac0dffdc375f237dbc8fac6c763bc707a208d377eb33d",
+    "first_broken_sequence": null,
+    "reason": "chain intact"
+  },
+  "privacy": {
+    "records_redacted": 56,
+    "fields_kept": 92,
+    "fields_pseudonymized": 193,
+    "fields_masked": 0,
+    "fields_dropped": 15,
+    "fields_generalized": 12,
+    "free_text_substitutions": 84,
+    "sensitive_instances_handled": 304,
+    "leak_scan": {
+      "records_scanned": 56,
+      "terms_checked": 34,
+      "leaked_terms": [],
+      "leak_count": 0,
+      "clean": true
+    },
+    "operational_records_correctly_redacted": 1.0
+  },
+  "audit_completeness": {
+    "records": 57,
+    "records_with_all_required_fields": 57,
+    "field_completeness": 1.0,
+    "missing_field_counts": {},
+    "layers_present": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "layers_missing": [],
+    "layer_coverage": 1.0,
+    "records_by_class": {
+      "observed_fact": 27,
+      "model_inference": 19,
+      "human_decision": 3,
+      "action_taken": 8
+    }
+  },
+  "explainability": {
+    "records": 57,
+    "records_traceable_to_source": 57,
+    "traceability": 1.0
+  },
+  "store": {
+    "path": "artifacts/full_run/audit_chain.jsonl",
+    "records": 57,
+    "head_hash": "485f345b8166ea62be5ac0dffdc375f237dbc8fac6c763bc707a208d377eb33d"
+  }
+}

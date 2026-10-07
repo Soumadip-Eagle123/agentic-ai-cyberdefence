@@ -1,0 +1,400 @@
+{
+  "report_id": "RPT-CASE-3b82cc12",
+  "case_id": "CASE-3b82cc12",
+  "scenario_id": "port_scan_attack_01",
+  "title": "ACCDS incident report for case CASE-3b82cc12",
+  "generated_at": "2026-09-12T17:09:30.776514+00:00",
+  "view": "operational",
+  "summary": {
+    "scenario_id": "port_scan_attack_01",
+    "records": 21,
+    "first_record": "2026-09-12T14:00:00+00:00",
+    "last_record": "2026-09-12T17:04:16.747894+00:00",
+    "layer_coverage": {
+      "layer_0": 6,
+      "layer_1": 5,
+      "layer_3": 2,
+      "layer_2": 3,
+      "layer_5": 2,
+      "layer_4": 2,
+      "layer_6": 1
+    },
+    "records_by_class": {
+      "observed_fact": 11,
+      "model_inference": 5,
+      "human_decision": 2,
+      "action_taken": 3
+    }
+  },
+  "sections": {
+    "observed_fact": [
+      {
+        "sequence": 0,
+        "audit_id": "audit-bbb344a94521",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 0,
+        "layer_name": "Data Ingestion",
+        "actor": "layer0.ingestion",
+        "action": "observation.normalized",
+        "outcome": "success",
+        "record_class": "observed_fact",
+        "summary": "subject~dc23d94e88b6 -> network~443695514664 via TCP (4096 bytes) in zone Intensive Care Unit",
+        "input_reference": "/logs/raw/port_scan_attack_01/event~3be1a21724cb.json",
+        "output_reference": "event://event~3be1a21724cb"
+      },
+      {
+        "sequence": 1,
+        "audit_id": "audit-924f28660379",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 0,
+        "layer_name": "Data Ingestion",
+        "actor": "layer0.ingestion",
+        "action": "observation.normalized",
+        "outcome": "success",
+        "record_class": "observed_fact",
+        "summary": "subject~dc23d94e88b6 -> network~443695514664 via TCP (4096 bytes) in zone Intensive Care Unit",
+        "input_reference": "/logs/raw/port_scan_attack_01/event~1feb3dd79b41.json",
+        "output_reference": "event://event~1feb3dd79b41"
+      },
+      {
+        "sequence": 2,
+        "audit_id": "audit-497a8c4554f8",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 1,
+        "layer_name": "Asset Intelligence",
+        "actor": "layer1.asset_intelligence",
+        "action": "asset.context.resolved",
+        "outcome": "success",
+        "record_class": "observed_fact",
+        "summary": "Asset asset~a45d52d06645 identified as Patient Monitor Gateway in Intensive Care Unit, clinical tier 1, identity confidence 0.98",
+        "input_reference": "event://None",
+        "output_reference": "asset://asset~a45d52d06645"
+      },
+      {
+        "sequence": 3,
+        "audit_id": "audit-7f2fe2aa3262",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 0,
+        "layer_name": "Data Ingestion",
+        "actor": "layer0.ingestion",
+        "action": "observation.normalized",
+        "outcome": "success",
+        "record_class": "observed_fact",
+        "summary": "subject~dc23d94e88b6 -> network~443695514664 via TCP (4096 bytes) in zone Intensive Care Unit",
+        "input_reference": "/logs/raw/port_scan_attack_01/event~c2743e34449a.json",
+        "output_reference": "event://event~c2743e34449a"
+      },
+      {
+        "sequence": 4,
+        "audit_id": "audit-3e6af60d985c",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 1,
+        "layer_name": "Asset Intelligence",
+        "actor": "layer1.asset_intelligence",
+        "action": "asset.context.resolved",
+        "outcome": "success",
+        "record_class": "observed_fact",
+        "summary": "Asset asset~a45d52d06645 identified as Patient Monitor Gateway in Intensive Care Unit, clinical tier 1, identity confidence 0.98",
+        "input_reference": "event://None",
+        "output_reference": "asset://asset~a45d52d06645"
+      },
+      {
+        "sequence": 6,
+        "audit_id": "audit-7334fff918d8",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 0,
+        "layer_name": "Data Ingestion",
+        "actor": "layer0.ingestion",
+        "action": "observation.normalized",
+        "outcome": "success",
+        "record_class": "observed_fact",
+        "summary": "subject~dc23d94e88b6 -> network~443695514664 via TCP (4096 bytes) in zone Intensive Care Unit",
+        "input_reference": "/logs/raw/port_scan_attack_01/event~e251453323a0.json",
+        "output_reference": "event://event~e251453323a0"
+      },
+      {
+        "sequence": 7,
+        "audit_id": "audit-e53feee89fa1",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 1,
+        "layer_name": "Asset Intelligence",
+        "actor": "layer1.asset_intelligence",
+        "action": "asset.context.resolved",
+        "outcome": "success",
+        "record_class": "observed_fact",
+        "summary": "Asset asset~a45d52d06645 identified as Patient Monitor Gateway in Intensive Care Unit, clinical tier 1, identity confidence 0.98",
+        "input_reference": "event://None",
+        "output_reference": "asset://asset~a45d52d06645"
+      },
+      {
+        "sequence": 13,
+        "audit_id": "audit-87e16eb868ef",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 0,
+        "layer_name": "Data Ingestion",
+        "actor": "layer0.ingestion",
+        "action": "observation.normalized",
+        "outcome": "success",
+        "record_class": "observed_fact",
+        "summary": "subject~dc23d94e88b6 -> network~443695514664 via TCP (4096 bytes) in zone Intensive Care Unit",
+        "input_reference": "/logs/raw/port_scan_attack_01/event~3ac28d81b0d8.json",
+        "output_reference": "event://event~3ac28d81b0d8"
+      },
+      {
+        "sequence": 14,
+        "audit_id": "audit-8dfe494435ab",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 1,
+        "layer_name": "Asset Intelligence",
+        "actor": "layer1.asset_intelligence",
+        "action": "asset.context.resolved",
+        "outcome": "success",
+        "record_class": "observed_fact",
+        "summary": "Asset asset~a45d52d06645 identified as Patient Monitor Gateway in Intensive Care Unit, clinical tier 1, identity confidence 0.98",
+        "input_reference": "event://None",
+        "output_reference": "asset://asset~a45d52d06645"
+      },
+      {
+        "sequence": 15,
+        "audit_id": "audit-fefc60d38416",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 0,
+        "layer_name": "Data Ingestion",
+        "actor": "layer0.ingestion",
+        "action": "observation.normalized",
+        "outcome": "success",
+        "record_class": "observed_fact",
+        "summary": "subject~dc23d94e88b6 -> network~443695514664 via TCP (4096 bytes) in zone Intensive Care Unit",
+        "input_reference": "/logs/raw/port_scan_attack_01/event~fe0c621a4917.json",
+        "output_reference": "event://event~fe0c621a4917"
+      },
+      {
+        "sequence": 16,
+        "audit_id": "audit-5432fab541a9",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 1,
+        "layer_name": "Asset Intelligence",
+        "actor": "layer1.asset_intelligence",
+        "action": "asset.context.resolved",
+        "outcome": "success",
+        "record_class": "observed_fact",
+        "summary": "Asset asset~a45d52d06645 identified as Patient Monitor Gateway in Intensive Care Unit, clinical tier ClinicalTier.TIER_1, identity confidence 0.98",
+        "input_reference": "event://None",
+        "output_reference": "asset://asset~a45d52d06645"
+      }
+    ],
+    "model_inference": [
+      {
+        "sequence": 9,
+        "audit_id": "audit-fc1597f2e197",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 3,
+        "layer_name": "Multi-Agent Orchestration",
+        "actor": "layer3.orchestrator",
+        "action": "proposal.generated",
+        "outcome": "escalated",
+        "record_class": "model_inference",
+        "summary": "Case CASE-4b353588 proposes [SURGICAL_BLOCK] at approval level REQUIRES_HUMAN_APPROVAL; CRITICAL: System is Tier 1 (Patient Monitor Gateway). Interventions must preserve critical flows.",
+        "input_reference": "finding://unknown",
+        "output_reference": "case://CASE-4b353588"
+      },
+      {
+        "sequence": 18,
+        "audit_id": "audit-f23a759abb07",
+        "timestamp": "2026-09-12T14:00:00+00:00",
+        "layer": 3,
+        "layer_name": "Multi-Agent Orchestration",
+        "actor": "layer3.orchestrator",
+        "action": "proposal.generated",
+        "outcome": "escalated",
+        "record_class": "model_inference",
+        "summary": "Case CASE-3b82cc12 proposes [SURGICAL_BLOCK] at approval level REQUIRES_HUMAN_APPROVAL; CRITICAL: System is Tier 1 (Patient Monitor Gateway). Interventions must preserve critical flows.",
+        "input_reference": "finding://unknown",
+        "output_reference": "case://CASE-3b82cc12"
+      },
+      {
+        "sequence": 5,
+        "audit_id": "audit-e532bb81ba35",
+        "timestamp": "2026-09-12T14:05:00+00:00",
+        "layer": 2,
+        "layer_name": "ML Behavioral Model",
+        "actor": "layer2.model:v1.0.0",
+        "action": "finding.emitted",
+        "outcome": "success",
+        "record_class": "model_inference",
+        "summary": "Finding FIND-A14E9B57 on asset~a45d52d06645: anomaly 0.89, risk 0.92, indicators [PORT_SCAN_SWEEP, UNAUTHORIZED_PEER_COMMUNICATION, UNIFORM_PROBE_PAYLOAD_DETECTED]",
+        "input_reference": "events://1-related",
+        "output_reference": "finding://FIND-A14E9B57"
+      },
+      {
+        "sequence": 8,
+        "audit_id": "audit-1e6d0bf92853",
+        "timestamp": "2026-09-12T14:05:00+00:00",
+        "layer": 2,
+        "layer_name": "ML Behavioral Model",
+        "actor": "layer2.model:v1.0.0",
+        "action": "finding.emitted",
+        "outcome": "success",
+        "record_class": "model_inference",
+        "summary": "Finding FIND-A14E9B57 on asset~a45d52d06645: anomaly 0.89, risk 0.92, indicators [PORT_SCAN_SWEEP, UNAUTHORIZED_PEER_COMMUNICATION, UNIFORM_PROBE_PAYLOAD_DETECTED]",
+        "input_reference": "events://1-related",
+        "output_reference": "finding://FIND-A14E9B57"
+      },
+      {
+        "sequence": 17,
+        "audit_id": "audit-3eda34abd678",
+        "timestamp": "2026-09-12T14:05:00+00:00",
+        "layer": 2,
+        "layer_name": "ML Behavioral Model",
+        "actor": "layer2.model:v1.0.0",
+        "action": "finding.emitted",
+        "outcome": "success",
+        "record_class": "model_inference",
+        "summary": "Finding FIND-A14E9B57 on asset~a45d52d06645: anomaly 0.89, risk 0.92, indicators [PORT_SCAN_SWEEP, UNAUTHORIZED_PEER_COMMUNICATION, UNIFORM_PROBE_PAYLOAD_DETECTED]",
+        "input_reference": "events://1-related",
+        "output_reference": "finding://FIND-A14E9B57"
+      }
+    ],
+    "human_decision": [
+      {
+        "sequence": 10,
+        "audit_id": "audit-8f8cb3ad1541",
+        "timestamp": "2026-09-12T16:13:55.929428+00:00",
+        "layer": 5,
+        "layer_name": "Decision Gate",
+        "actor": "layer5.reviewer:person~524480b21d87",
+        "action": "decision.recorded",
+        "outcome": "success",
+        "record_class": "human_decision",
+        "summary": "Reviewer person~524480b21d87 recorded APPROVED for case CASE-4b353588 (scope 4467f87c13b6ef0cbc26730a67dcf507d5f9a38a8bd927be7067ee2de7d7681c): Verified port scan attack on Tier 1 monitor. Surgical block approved.",
+        "input_reference": "case://CASE-4b353588",
+        "output_reference": "decision://DEC-HUMAN-2217CE"
+      },
+      {
+        "sequence": 19,
+        "audit_id": "audit-8e8b024403a9",
+        "timestamp": "2026-09-12T16:13:55.929428+00:00",
+        "layer": 5,
+        "layer_name": "Decision Gate",
+        "actor": "layer5.reviewer:person~524480b21d87",
+        "action": "decision.recorded",
+        "outcome": "success",
+        "record_class": "human_decision",
+        "summary": "Reviewer person~524480b21d87 recorded APPROVED for case CASE-3b82cc12 (scope 4467f87c13b6ef0cbc26730a67dcf507d5f9a38a8bd927be7067ee2de7d7681c): Verified port scan attack on Tier 1 monitor. Surgical block approved.",
+        "input_reference": "case://CASE-3b82cc12",
+        "output_reference": "decision://DEC-HUMAN-2217CE"
+      }
+    ],
+    "action_taken": [
+      {
+        "sequence": 11,
+        "audit_id": "audit-740b283b5633",
+        "timestamp": "2026-09-12T16:13:55.929506+00:00",
+        "layer": 4,
+        "layer_name": "Containment & Enforcement",
+        "actor": "layer4.enforcement",
+        "action": "enforcement.applied",
+        "outcome": "success",
+        "record_class": "action_taken",
+        "summary": "SURGICAL_BLOCK on asset~a45d52d06645: 1 flow(s) blocked, 1 preserved, status APPLIED",
+        "input_reference": "decision://DEC-HUMAN-2217CE",
+        "output_reference": "action://ACT-DEC500E0"
+      },
+      {
+        "sequence": 20,
+        "audit_id": "audit-4a83dd9d3f12",
+        "timestamp": "2026-09-12T16:13:55.929506+00:00",
+        "layer": 4,
+        "layer_name": "Containment & Enforcement",
+        "actor": "layer4.enforcement",
+        "action": "enforcement.applied",
+        "outcome": "success",
+        "record_class": "action_taken",
+        "summary": "SURGICAL_BLOCK on asset~a45d52d06645: 1 flow(s) blocked, 1 preserved, status APPLIED",
+        "input_reference": "decision://DEC-HUMAN-2217CE",
+        "output_reference": "action://ACT-DEC500E0"
+      },
+      {
+        "sequence": 12,
+        "audit_id": "audit-2e2e3f56e673",
+        "timestamp": "2026-09-12T17:04:16.747894+00:00",
+        "layer": 6,
+        "layer_name": "Compliance & Privacy",
+        "actor": "analyst:soc_analyst",
+        "action": "evidence.read.operational",
+        "outcome": "success",
+        "record_class": "action_taken",
+        "summary": "evidence.read.operational: incident review",
+        "input_reference": "audit-store://audit_chain.jsonl",
+        "output_reference": "view://operational/12-records"
+      }
+    ]
+  },
+  "integrity": {
+    "ok": true,
+    "records_checked": 22,
+    "head_hash": "9d8394b7e6aba92296f35ea336b346ab1b0c1f94a52c463ea4c28742f0cfe277",
+    "first_broken_sequence": null,
+    "reason": "chain intact"
+  },
+  "metrics": {
+    "chain_verification": {
+      "ok": true,
+      "records_checked": 22,
+      "head_hash": "9d8394b7e6aba92296f35ea336b346ab1b0c1f94a52c463ea4c28742f0cfe277",
+      "first_broken_sequence": null,
+      "reason": "chain intact"
+    },
+    "privacy": {
+      "records_redacted": 21,
+      "fields_kept": 34,
+      "fields_pseudonymized": 85,
+      "fields_masked": 0,
+      "fields_dropped": 6,
+      "fields_generalized": 5,
+      "free_text_substitutions": 33,
+      "sensitive_instances_handled": 129,
+      "leak_scan": {
+        "records_scanned": 21,
+        "terms_checked": 13,
+        "leaked_terms": [],
+        "leak_count": 0,
+        "clean": true
+      },
+      "operational_records_correctly_redacted": 1.0
+    },
+    "audit_completeness": {
+      "records": 22,
+      "records_with_all_required_fields": 22,
+      "field_completeness": 1.0,
+      "missing_field_counts": {},
+      "layers_present": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "layers_missing": [],
+      "layer_coverage": 1.0,
+      "records_by_class": {
+        "observed_fact": 11,
+        "model_inference": 5,
+        "human_decision": 2,
+        "action_taken": 4
+      }
+    },
+    "explainability": {
+      "records": 22,
+      "records_traceable_to_source": 22,
+      "traceability": 1.0
+    },
+    "store": {
+      "path": "artifacts/full_run/audit_chain.jsonl",
+      "records": 22,
+      "head_hash": "9d8394b7e6aba92296f35ea336b346ab1b0c1f94a52c463ea4c28742f0cfe277"
+    }
+  }
+}

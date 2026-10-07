@@ -37,6 +37,7 @@ class AssetContext(BaseModel):
 class DetectionFinding(BaseModel):
     finding_id: str
     asset_id: str
+    attacker_src: Optional[str] = None
     behavior_window: str
     anomaly_score: float
     risk_score: float
@@ -44,7 +45,8 @@ class DetectionFinding(BaseModel):
     baseline_version: str
     confidence: float
     related_events: List[str]
-    recommended_observation_period: int  
+    recommended_observation_period: int
+    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 class ActionDetail(BaseModel):
     action_type: str  
@@ -70,6 +72,7 @@ class ResponseProposal(BaseModel):
     approval_level: ApprovalLevel
     expiry_time: str
     rollback_plan: RollbackPlan
+    correlated_finding_ids: List[str] = Field(default_factory=list)
 
 # ---------------------------------------------------------------------------
 # Layer 6 handoff - "All layers -> Layer 6" audit event
@@ -120,3 +123,80 @@ class AuditEvent(BaseModel):
     asset_id: Optional[str] = None
     payload: Dict[str, Any] = Field(default_factory=dict)
     contract_version: str = AUDIT_CONTRACT_VERSION
+
+class EnforcementStatus(str, Enum):
+    APPLIED = "APPLIED"
+    FAILED = "FAILED"
+    ROLLED_BACK = "ROLLED_BACK"
+
+
+class EnforcementResult(BaseModel):
+    action_id: str
+    case_id: str
+    target_asset: str
+    status: EnforcementStatus
+    applied_controls: List[Dict[str, Any]] = Field(default_factory=list)
+    blocked_flows: List[Dict[str, Any]] = Field(default_factory=list)
+    preserved_flows: List[Dict[str, Any]] = Field(default_factory=list)
+    start_time: str
+    expiry_time: str
+    verification: str
+    rollback_token: str
+
+# Add to src/schemas/contracts.py
+
+class DecisionOutcome(str, Enum):
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    EXPIRED = "EXPIRED"
+
+
+class DecisionRecord(BaseModel):
+    decision_id: str
+    case_id: str
+    reviewer: str
+    decision: DecisionOutcome
+    scope_hash: str
+    reason: str
+    timestamp: str
+    expiry: str
+    approved_action: Optional[ResponseProposal] = None
+
+# Add to src/schemas/contracts.py
+
+class AuditEvent(BaseModel):
+    audit_id: str
+    timestamp: str
+    layer_source: str
+    actor: str
+    event_type: str
+    summary: str
+    payload_hash: str
+    redacted_payload: Dict[str, Any]
+
+
+class IncidentReport(BaseModel):
+    report_id: str
+    generated_at: str
+    case_id: str
+    target_asset: str
+    clinical_tier: int
+    observed_facts: List[str]
+    model_inferences: List[str]
+    human_decisions: List[str]
+    actions_taken: List[str]
+    audit_chain: List[str]
+
+class ObservationEvent(BaseModel):
+    event_id: str
+    timestamp: str
+    source: str
+    event_type: str
+    subject: str
+    src: str
+    dst: str
+    protocol: str
+    bytes: int
+    zone: str
+    scenario_id: str
+    raw_reference: str

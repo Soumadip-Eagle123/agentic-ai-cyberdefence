@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence
-
+from datetime import datetime, timezone
 from .contracts import AuditEvent, Outcome, RecordClass, new_audit_event, parse_timestamp
 
 
@@ -150,6 +150,11 @@ def select_findings(
 # Layer 3 - response proposal
 # --------------------------------------------------------------------------
 def proposal_to_audit(proposal: Dict[str, Any], scenario_id: Optional[str] = None) -> AuditEvent:
+    raw_ts = (
+        proposal.get("generated_at")
+        or proposal.get("timestamp")
+        or datetime.now(timezone.utc).isoformat()
+    )
     return new_audit_event(
         layer=3,
         actor="layer3.orchestrator",
@@ -160,7 +165,7 @@ def proposal_to_audit(proposal: Dict[str, Any], scenario_id: Optional[str] = Non
         outcome=Outcome.ESCALATED
         if proposal.get("approval_level") == "REQUIRES_HUMAN_APPROVAL"
         else Outcome.SUCCESS,
-        timestamp=parse_timestamp(proposal["generated_at"]),
+        timestamp=parse_timestamp(raw_ts),
         case_id=proposal.get("case_id"),
         scenario_id=scenario_id,
         asset_id=(proposal.get("affected_assets") or [None])[0],

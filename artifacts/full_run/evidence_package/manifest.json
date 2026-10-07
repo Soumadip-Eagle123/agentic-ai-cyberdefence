@@ -1,0 +1,50 @@
+{
+  "package_id": "EVID-CASE-CORR-7CEA8A",
+  "case_id": "CASE-CORR-7CEA8A",
+  "scenario_id": "six_stage_attack_campaign",
+  "generated_at": "2026-10-07T13:49:47.128030+00:00",
+  "contract_version": "accds-audit-v1",
+  "view": "operational",
+  "contains_forensic_records": true,
+  "audit_chain": {
+    "ok": true,
+    "records_checked": 57,
+    "head_hash": "485f345b8166ea62be5ac0dffdc375f237dbc8fac6c763bc707a208d377eb33d",
+    "first_broken_sequence": null,
+    "reason": "chain intact",
+    "store_path": "artifacts/full_run/audit_chain.jsonl",
+    "store_records": 57
+  },
+  "files": [
+    {
+      "name": "incident_timeline.json",
+      "bytes": 35026,
+      "sha256": "65047f78d4ac02bfa2c8adb0f10bf364e9d65037c70f05a8d09767c3e6d86dc2"
+    },
+    {
+      "name": "operational_view.jsonl",
+      "bytes": 61620,
+      "sha256": "3c38b2802f22374a685071ca4998459de4e168cfffafb1c5f7cd054f9fd31d1f"
+    },
+    {
+      "name": "forensic_records.jsonl",
+      "bytes": 61180,
+      "sha256": "dca4138ccc2abdde68fb5136c757f2b11f20a5ca065caed77038c28dfebf78e2"
+    },
+    {
+      "name": "layer6_metrics.json",
+      "bytes": 1409,
+      "sha256": "fac8eadf3082c26987cb04b650eb96e023aeea8c06b2f4a35c78724607c9d395"
+    },
+    {
+      "name": "RPT-CASE-CORR-7CEA8A.md",
+      "bytes": 12499,
+      "sha256": "5b0947a5c071aec42ba28e7629b560aa1f76d4a2ee1e4a9d1f44dd08ff9de3b6"
+    },
+    {
+      "name": "RPT-CASE-CORR-7CEA8A.json",
+      "bytes": 36990,
+      "sha256": "e990559e1bcdda73e9810741e81d79f7858b186d58b4104436820887dc354e0b"
+    }
+  ]
+}
