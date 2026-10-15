@@ -11,7 +11,8 @@ adapter can reach a real authority.
 
 ## Run it
 
-Stdlib only — Python 3.12+, no install required. From the repository root:
+Stdlib only — Python 3.12+, no install required (ML-DSA signing is the one optional
+extra, and Layer 6 runs without it). From the repository root:
 
 ```bash
 # Full pipeline for one scenario
@@ -24,8 +25,18 @@ python3 -m compliance.cli all --output artifacts/layer6-all
 python3 -m compliance.cli verify --store artifacts/layer6/audit_chain.jsonl
 python3 -m compliance.cli verify-package --package artifacts/layer6/evidence_package
 
-# Acceptance tests
+# Acceptance tests (61)
 python3 -m unittest discover -s tests -t .
+
+# Key provenance, data location, ML-DSA availability
+python3 -m compliance.cli keys
+
+# Retention status, and lawful erasure by sequence number
+python3 -m compliance.cli retention --store artifacts/layer6/audit_chain.jsonl
+python3 -m compliance.cli retention --erase 3 --actor dpo:k.raman --reason "erasure request #4471"
+
+# Post-quantum signed checkpoint (FIPS 204)
+python3 -m compliance.cli demo --signer mldsa --output artifacts/layer6-pq
 ```
 
 The demo exits non-zero if the audit chain fails verification or the leak scan finds
@@ -45,7 +56,12 @@ anything, so it works as a CI gate.
 | `reporting.py` | Standardized report, Markdown/JSON rendering, dispatch adapters |
 | `metrics.py` | Redaction coverage, leak scan, audit completeness, traceability |
 | `pipeline.py` | End-to-end run over the repository's existing artifacts |
-| `upstream_stubs.py` | Marked stand-ins for Layers 3, 4 and 5 until those exist |
+| `keys.py` | Separate chain and pseudonym keys, resolved from env/file, with a managed-key gate |
+| `retention.py` | Retention windows and tombstone erasure that does not break the chain |
+| `signing.py` | Pluggable checkpoint signer: HMAC by default, FIPS 204 ML-DSA optionally |
+| `emitter.py` | The one call other layers make to report into Layer 6 |
+| `datasources.py` | Locates Layer 2's artifacts wherever they currently live |
+| `upstream_stubs.py` | Marked stand-ins for Layers 3 and 4 until those exist |
 
 ## The audit event
 
@@ -113,12 +129,90 @@ one scenario and verify that sensitive fields are redacted in the operational vi
 while authorized forensic users can trace each record to its source."*
 
 Verified for all eight Layer 2 scenarios: chain intact, layer coverage 1.0,
-traceability 1.0, leak count 0. See `tests/test_layer6.py`.
+traceability 1.0, leak count 0. 61 tests across `tests/test_layer6.py` (contract,
+tamper evidence, privacy, access control, reporting, acceptance) and
+`tests/test_layer6_hardening.py` (keys, retention, signing, emitter, data sources,
+the Layer 5 bridge).
+
+## Key management
+
+Two independent keys, and the code refuses to let them be the same value: anyone
+who can verify the chain must not thereby be able to reverse every pseudonym.
+
+```bash
+export ACCDS_CHAIN_KEY="..."       # authenticates the audit chain
+export ACCDS_PSEUDONYM_KEY="..."   # derives operational pseudonyms
+# or: export ACCDS_KEY_FILE=/path/to/keys.json
+```
+
+Without them, Layer 6 falls back to clearly-labelled development keys and says so
+in every run. Pass `--require-managed-keys` (or `require_managed_keys=True`) to
+fail closed instead. Exports record a salted *fingerprint* of each key, never the key,
+so two exports can be told apart without revealing the secret.
+
+Rotating the pseudonym key breaks correlation with previously exported material.
+That is intended, but plan rotations deliberately.
+
+## Retention and lawful erasure
+
+An append-only chain and a right-to-erasure request pull against each other:
+deleting a record breaks every hash after it. Layer 6 resolves this with
+**tombstones** — the record stays in place so the chain still verifies, its payload
+is replaced by a keyed digest commitment, and the erasure is itself audited.
+
+An authorized investigator holding a copy from elsewhere can confirm what *was*
+there via `verify_erasure()`, without the store retaining the content.
+
+One consequence to plan for: erasure rewrites the chain, so the head hash changes
+and evidence packages exported *before* the erasure will no longer match the new head.
+
+## Checkpoint signing
+
+The chain already binds every record to its predecessor, so one signature over the
+chain head certifies everything beneath it. Layer 6 signs checkpoints per case and
+per export rather than signing every record.
+
+| Signer | Proves | Third-party verifiable | Cost |
+|---|---|---|---|
+| `hmac` (default) | someone with the key wrote it | no | 32 B |
+| `mldsa` (FIPS 204, ML-DSA-65) | *which layer* wrote it | **yes** | 3,309 B |
+
+ML-DSA is optional: it needs `cryptography` built against OpenSSL 3.5+, and Layer 6
+keeps working without it. Choosing a post-quantum scheme is deliberate — clinical
+records carry multi-decade retention, and a classical signature on a record still
+held in 2050 is a retroactive-forgery risk.
+
+An ML-DSA package carries its own public key, so `verify-package` validates the
+signature with no shared secret at all. Note the three-state result: `valid`,
+`rejected`, and `unverifiable` — "I have no key to check this" is never reported
+as "this is forged".
+
+## How other layers report in
+
+```python
+from compliance import emitter
+
+emitter.configure("artifacts/accds/audit_chain.jsonl")   # once, at startup
+emitter.emit(
+    layer=4, actor="layer4.enforcement", action="enforcement.applied",
+    input_reference="decision://DEC-9f2c", output_reference="action://ACT-71ab",
+    record_class="action_taken", payload=result,
+)
+```
+
+`emit` does not raise on a malformed record by default — a bad audit call must not
+take down enforcement or detection. Failures are counted and reported by
+`emitter.failures()`; pass `strict=True` in tests to surface them.
 
 ## Known limitation
 
-Layers 0, 1, 4 and 5 do not exist yet. Layer 0/1 records are reconstructed from the
-Layer 2 synthetic generator's enriched events, and Layer 3/4/5 records come from
+Layers 0, 1 and 4 do not exist yet. Layer 0/1 records are reconstructed from the
+Layer 2 synthetic generator's enriched events, and Layer 3/4 records come from
 `upstream_stubs.py`, where every record is tagged `"_source":
-"placeholder-until-layer-implemented"`. Replacing them is a change of import in
-`pipeline.py`, not a change of shape.
+"placeholder-until-layer-implemented"`.
+
+Layer 5 is real: `ingest.decision_gate_to_audit()` consumes an actual
+`decision_gate.models.DecisionRecord`, absorbing two mismatches on Layer 5's behalf —
+its naive `datetime.utcnow()` timestamps are read as UTC, and its lowercase decision
+verbs map onto the outcome vocabulary, with unknown verbs escalating rather than
+silently succeeding.

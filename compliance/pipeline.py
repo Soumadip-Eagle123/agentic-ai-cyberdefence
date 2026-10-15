@@ -1,8 +1,9 @@
 """End-to-end Layer 6 run over the artifacts the other layers have produced.
 
-Reads real Layer 0/1/2 records from the repository's demo artifacts, fills the
-Layer 3/4/5 gap with clearly marked stand-ins, and produces the chain, both
-views, the timeline, the metrics, the evidence package and the report.
+Reads real Layer 0/1/2 records from wherever Layer 2's artifacts currently live,
+fills the Layer 3/4 gap with clearly marked stand-ins, and produces the chain, a
+signed checkpoint, both views, the timeline, the metrics, the evidence package
+and the report.
 """
 
 from __future__ import annotations
@@ -14,6 +15,7 @@ from typing import Any, Dict, List, Optional, Sequence
 from .access import AccessController
 from .audit_store import TamperEvidentAuditStore
 from .contracts import AccessRole, ViewKind
+from .datasources import findings_file, scenario_file
 from .evidence import export_evidence_package
 from .ingest import (
     annotation_to_audit,
@@ -27,9 +29,12 @@ from .ingest import (
     rollback_to_audit,
     select_findings,
 )
+from .keys import KeyRing
 from .metrics import layer6_metrics
-from .redaction import DEFAULT_PSEUDONYM_KEY, RedactionEngine
+from .redaction import RedactionEngine
 from .reporting import build_report, get_adapter, render_markdown
+from .retention import RetentionManager, RetentionPolicy
+from .signing import build_signer, sign_checkpoint
 from .timeline import build_timeline, collect_case_records
 from .upstream_stubs import build_annotation, build_decision, build_enforcement, build_proposal
 
@@ -45,6 +50,8 @@ class Layer6Result:
     metrics: Dict[str, Any]
     report_files: List[str]
     timeline_entries: int
+    checkpoint: Dict[str, Any]
+    key_provenance: Dict[str, Any]
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -55,6 +62,8 @@ class Layer6Result:
             "evidence_manifest": self.manifest,
             "metrics": self.metrics,
             "report_files": self.report_files,
+            "checkpoint": self.checkpoint,
+            "key_provenance": self.key_provenance,
         }
 
 
@@ -64,14 +73,20 @@ def run_pipeline(
     findings_path: Optional[str | Path] = None,
     events_path: Optional[str | Path] = None,
     adapter_name: str = "file",
-    pseudonym_key: bytes = DEFAULT_PSEUDONYM_KEY,
+    keyring: Optional[KeyRing] = None,
+    signer_kind: str = "hmac",
     reviewer_decision: str = "APPROVED",
+    require_managed_keys: bool = False,
 ) -> Layer6Result:
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
 
-    findings_path = Path(findings_path or REPO_ROOT / "findings.json")
-    events_path = Path(events_path or REPO_ROOT / f"scenario_{scenario}.json")
+    ring = keyring or KeyRing.resolve()
+    if require_managed_keys:
+        ring.require_managed()
+
+    findings_path = findings_file(findings_path)
+    events_path = scenario_file(scenario, events_path)
 
     all_events: List[Dict[str, Any]] = load_json(events_path)
     all_findings: List[Dict[str, Any]] = load_json(findings_path)
@@ -96,7 +111,7 @@ def run_pipeline(
     enforcement, rollback = build_enforcement(proposal, decision)
     annotation = build_annotation(case_id)
 
-    store = TamperEvidentAuditStore(output / "audit_chain.jsonl", key=pseudonym_key)
+    store = TamperEvidentAuditStore(output / "audit_chain.jsonl", key=ring.chain_key)
     store.extend(observations_to_audit(case_events, case_id=case_id))
     store.extend(asset_context_to_audit(asset_events, case_id=case_id))
     store.extend(findings_to_audit([finding], case_id=case_id))
@@ -106,7 +121,7 @@ def run_pipeline(
     store.append(rollback_to_audit(rollback, scenario_id=scenario))
     store.append(annotation_to_audit(annotation))
 
-    engine = RedactionEngine(key=pseudonym_key)
+    engine = RedactionEngine(key=ring.pseudonym_key)
     # Pre-seed the scrubber with the whole asset inventory so free text in one
     # record is scrubbed using identifiers first seen in another.
     engine.learn({event.get("asset_id") for event in all_events}, domain="asset")
@@ -156,6 +171,13 @@ def run_pipeline(
         extra_leak_terms=extra_terms,
     )
 
+    # One signature over the chain head certifies every record beneath it.
+    signer = build_signer(signer_kind, key=ring.chain_key)
+    checkpoint = sign_checkpoint(signer, store.head_hash, len(store), case_id)
+    metrics["checkpoint"] = checkpoint.to_dict()
+    metrics["key_provenance"] = ring.provenance()
+    metrics["retention"] = RetentionManager(store, RetentionPolicy.default()).report()
+
     report = build_report(timeline, metrics)
     markdown = render_markdown(report)
     adapter = get_adapter(adapter_name, output_dir=output) if adapter_name == "file" else get_adapter(adapter_name)
@@ -170,6 +192,7 @@ def run_pipeline(
         forensic_records=forensic.records,
         metrics=metrics,
         report_files=report_files,
+        checkpoint=checkpoint.to_dict(),
     )
 
     return Layer6Result(
@@ -180,4 +203,6 @@ def run_pipeline(
         metrics=metrics,
         report_files=[str(item) for item in report_files],
         timeline_entries=len(timeline.entries),
+        checkpoint=checkpoint.to_dict(),
+        key_provenance=ring.provenance(),
     )

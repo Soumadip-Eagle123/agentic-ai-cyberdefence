@@ -254,3 +254,61 @@ def annotation_to_audit(annotation: Dict[str, Any]) -> AuditEvent:
         case_id=annotation.get("case_id"),
         payload=annotation,
     )
+
+
+# --------------------------------------------------------------------------
+# Layer 5 - the real decision_gate package
+# --------------------------------------------------------------------------
+#: decision_gate emits lowercase verbs; the audit contract uses outcomes.
+DECISION_GATE_OUTCOMES = {
+    "approve": Outcome.SUCCESS,
+    "approved": Outcome.SUCCESS,
+    "reject": Outcome.REJECTED,
+    "rejected": Outcome.REJECTED,
+    "modify": Outcome.ESCALATED,
+    "escalate": Outcome.ESCALATED,
+    "escalated": Outcome.ESCALATED,
+    "timeout": Outcome.EXPIRED,
+}
+
+
+def decision_gate_to_audit(record: Any, scenario_id: Optional[str] = None) -> AuditEvent:
+    """Adapt a ``decision_gate.models.DecisionRecord`` into an audit event.
+
+    Accepts the dataclass or any object/dict with the same fields. Two mismatches
+    are absorbed here rather than pushed onto Layer 5:
+
+    * ``decision_gate`` stamps records with ``datetime.utcnow()``, which is naive;
+      the audit contract requires timezone-aware timestamps, so a naive value is
+      read as UTC.
+    * its decision verbs are lowercase (``approve``), while outcomes are a fixed
+      vocabulary; unknown verbs escalate rather than silently succeeding.
+    """
+    data = record if isinstance(record, dict) else {
+        name: getattr(record, name, None)
+        for name in ("decision_id", "case_id", "reviewer", "decision",
+                     "scope_hash", "reason", "approved_action", "timestamp")
+    }
+    verb = str(data.get("decision", "")).lower()
+    outcome = DECISION_GATE_OUTCOMES.get(verb, Outcome.ESCALATED)
+    return new_audit_event(
+        layer=5,
+        actor=f"layer5.reviewer:{data.get('reviewer')}",
+        action="decision.recorded",
+        input_reference=f"case://{data.get('case_id')}",
+        output_reference=f"decision://{data.get('decision_id')}",
+        record_class=RecordClass.HUMAN_DECISION,
+        outcome=outcome,
+        timestamp=parse_timestamp(data["timestamp"]),
+        case_id=data.get("case_id"),
+        scenario_id=scenario_id,
+        payload={
+            "decision_id": data.get("decision_id"),
+            "case_id": data.get("case_id"),
+            "reviewer": data.get("reviewer"),
+            "decision": verb,
+            "scope_hash": data.get("scope_hash"),
+            "reason": data.get("reason"),
+            "approved_action": data.get("approved_action"),
+        },
+    )

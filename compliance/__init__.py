@@ -9,6 +9,7 @@ Safety boundary: this package is record-keeping only. It issues no containment,
 enforcement or approval commands, and it performs no network I/O.
 """
 
+from . import emitter  # noqa: F401  (module-level audit sink)
 from .access import AccessController, AccessDenied, AccessResult
 from .audit_store import ChainedRecord, TamperEvidentAuditStore, compute_hash
 from .contracts import (
@@ -23,14 +24,42 @@ from .contracts import (
     ViewKind,
     new_audit_event,
 )
+from .datasources import DataSourceNotFound, find_data_dir, findings_file, scenario_file
 from .evidence import export_evidence_package, verify_evidence_package
+from .keys import InsecureKeyError, KeyRing
 from .metrics import audit_completeness, layer6_metrics, leak_scan
 from .pipeline import Layer6Result, run_pipeline
 from .redaction import FieldAction, FieldRule, Pseudonymizer, RedactionEngine
 from .reporting import IncidentReport, build_report, get_adapter, render_markdown
+from .retention import RetentionManager, RetentionPolicy
+from .signing import (
+    Checkpoint,
+    HmacSigner,
+    MLDSASigner,
+    build_signer,
+    mldsa_available,
+    sign_checkpoint,
+    verify_checkpoint,
+)
 from .timeline import build_timeline, collect_case_records
 
 __all__ = [
+    "emitter",
+    "Checkpoint",
+    "DataSourceNotFound",
+    "HmacSigner",
+    "InsecureKeyError",
+    "KeyRing",
+    "MLDSASigner",
+    "RetentionManager",
+    "RetentionPolicy",
+    "build_signer",
+    "find_data_dir",
+    "findings_file",
+    "mldsa_available",
+    "scenario_file",
+    "sign_checkpoint",
+    "verify_checkpoint",
     "AUDIT_CONTRACT_VERSION",
     "AccessController",
     "AccessDenied",

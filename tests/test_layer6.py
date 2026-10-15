@@ -283,8 +283,19 @@ class ReportingTests(unittest.TestCase):
 class AcceptanceTests(TempDirTest):
     @classmethod
     def setUpClass(cls):
-        if not (REPO_ROOT / "findings.json").exists():
-            raise unittest.SkipTest("Layer 2 artifacts are not present")
+        # Deliberately NOT a skip. An earlier version skipped when the artifacts
+        # were missing; Layer 2's output then moved and the suite kept reporting
+        # OK while these tests silently stopped running. A missing data source is
+        # a failure, not an absence.
+        from compliance.datasources import DataSourceNotFound, findings_file
+
+        try:
+            findings_file()
+        except DataSourceNotFound as error:
+            raise AssertionError(
+                f"Layer 6 cannot locate Layer 2's artifacts, so its acceptance "
+                f"tests cannot run:\n{error}"
+            ) from error
 
     def test_full_incident_timeline_from_one_scenario(self):
         result = run_pipeline(self.tmp / "run", scenario="port_scan", adapter_name="file")
