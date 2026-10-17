@@ -30,6 +30,28 @@ class Layer4Executor:
     def __init__(self):
         self.active_rules: Dict[str, ActiveRule] = {}
 
+    @staticmethod
+    def _primary_target(proposal: ResponseProposal) -> str:
+        """The asset the result is reported against.
+
+        `affected_assets` comes from a set, so its order is arbitrary - picking
+        element zero could name a Tier 3 printer as the target of a campaign
+        that reached intensive care. The clinically most critical asset is the
+        one a reviewer and an auditor care about, so report that one.
+        """
+        if not proposal.affected_assets:
+            return "UNKNOWN"
+        try:
+            from digital_twin import hospital
+
+            ranked = sorted(
+                proposal.affected_assets,
+                key=lambda a: ((hospital.by_asset_id(a).tier if hospital.by_asset_id(a) else 9), a),
+            )
+            return ranked[0]
+        except ImportError:
+            return sorted(proposal.affected_assets)[0]
+
     def execute_proposal(
         self,
         proposal: ResponseProposal,
@@ -45,7 +67,7 @@ class Layer4Executor:
             return EnforcementResult(
                 action_id=f"ACT-REJECTED-{uuid.uuid4().hex[:6]}",
                 case_id=proposal.case_id,
-                target_asset=proposal.affected_assets[0] if proposal.affected_assets else "UNKNOWN",
+                target_asset=self._primary_target(proposal),
                 status=EnforcementStatus.FAILED,
                 applied_controls=[],
                 blocked_flows=[],
@@ -57,7 +79,7 @@ class Layer4Executor:
             )
 
         action_id = f"ACT-{uuid.uuid4().hex[:8].upper()}"
-        target_asset = proposal.affected_assets[0] if proposal.affected_assets else "UNKNOWN"
+        target_asset = self._primary_target(proposal)
         rollback_token = proposal.rollback_plan.rollback_token_spec
 
         all_blocked_flows = []

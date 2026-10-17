@@ -3,7 +3,7 @@ Data models for Layer 5 — Decision Gate.
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 import hashlib
 import json
@@ -22,13 +22,13 @@ class ResponseProposal:
     proposed_action: str
     expiry_minutes: int
     rollback_plan: str
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     def expiry_time(self) -> datetime:
         return self.created_at + timedelta(minutes=self.expiry_minutes)
 
     def is_expired(self, now: Optional[datetime] = None) -> bool:
-        now = now or datetime.utcnow()
+        now = now or datetime.now(timezone.utc)
         return now >= self.expiry_time()
 
     def action_hash(self) -> str:
@@ -52,4 +52,4 @@ class DecisionRecord:
     scope_hash: str
     reason: str
     approved_action: Optional[str]
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))

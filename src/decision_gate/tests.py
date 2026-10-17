@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import pytest
 
 from decision_gate.models import ResponseProposal
@@ -57,7 +57,7 @@ def test_invalid_decision_string_raises():
 
 def test_expired_proposal_cannot_be_decided():
     p = _make_proposal(expiry_minutes=10)
-    p.created_at = datetime.utcnow() - timedelta(minutes=15)
+    p.created_at = datetime.now(timezone.utc) - timedelta(minutes=15)
     with pytest.raises(ValueError):
         process_decision(p, "approve", "dr_iyer", p.action_hash())
 
