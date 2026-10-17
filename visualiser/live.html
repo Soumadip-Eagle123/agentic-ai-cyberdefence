@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACCDS Hospital — Live</title>
+<style>
+  :root{--bg:#0b1020;--panel:#141a2e;--line:#243049;--text:#e8edf7;--muted:#8b97b4;
+        --t1:#ef4444;--t2:#f59e0b;--t3:#38bdf8;--atk:#ff3b5c;--ok:#22c55e}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+       font:14px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+  header{padding:16px 24px 6px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  h1{margin:0;font-size:19px;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:12.5px}
+  .wrap{display:flex;gap:16px;padding:10px 24px 24px;align-items:flex-start;flex-wrap:wrap}
+  .stage-wrap{flex:1 1 620px;min-width:0}
+  svg{width:100%;height:auto;display:block;background:#0d1326;border:1px solid var(--line);border-radius:14px}
+  .room{fill:#121a30;stroke:var(--line);stroke-width:1.5}
+  .room-label{fill:var(--muted);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  .edge-base{stroke:#2b3755;stroke-width:1.5;fill:none}
+  .edge-atk{stroke:var(--atk);stroke-width:3;fill:none;filter:drop-shadow(0 0 6px rgba(255,59,92,.6))}
+  .node{cursor:pointer}
+  .node circle.body{fill:#1b2742;stroke-width:3;transition:fill .18s,r .18s}
+  .node.hit circle.body{fill:#3a1420}
+  .node.pwn circle.body{fill:#4a1020;stroke-dasharray:4 3}
+  .node.sel circle.body{fill:#26354f;stroke:#fff}
+  .node.target circle.body{fill:#1a3326;stroke:var(--ok)}
+  .node text{fill:var(--text);font-size:10.5px;text-anchor:middle;pointer-events:none}
+  .node .ip{fill:var(--muted);font-size:9px}
+  .panel{flex:0 1 350px;min-width:300px;background:var(--panel);border:1px solid var(--line);
+         border-radius:14px;padding:14px;max-height:88vh;overflow:auto}
+  h2{margin:0 0 8px;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+  .kv{display:grid;grid-template-columns:92px 1fr;gap:3px 10px;font-size:12.5px}
+  .kv dt{color:var(--muted)} .kv dd{margin:0;word-break:break-word}
+  .tier{display:inline-block;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700}
+  .tier1{background:rgba(239,68,68,.18);color:var(--t1)}
+  .tier2{background:rgba(245,158,11,.18);color:var(--t2)}
+  .tier3{background:rgba(56,189,248,.18);color:var(--t3)}
+  button{background:#1d2740;color:var(--text);border:1px solid var(--line);border-radius:8px;
+         padding:7px 12px;font-size:12.5px;cursor:pointer;font-weight:600}
+  button:hover:not(:disabled){background:#26324f}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  button.danger{background:var(--atk);border-color:var(--atk);color:#fff}
+  button.good{background:var(--ok);border-color:var(--ok);color:#06240f}
+  select,input[type=text]{background:#0f1628;color:var(--text);border:1px solid var(--line);
+         border-radius:8px;padding:7px 9px;font-size:12.5px;width:100%}
+  label{display:block;font-size:11px;color:var(--muted);margin:9px 0 3px;text-transform:uppercase;letter-spacing:.05em}
+  .row{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+  .row>*{flex:1}
+  .banner{padding:9px 11px;border-radius:9px;font-size:12.5px;margin-bottom:11px;font-weight:600}
+  .banner.crit{background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.4);color:#ffb3bf}
+  .banner.ok{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#a7f3c4}
+  .banner.warn{background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.4);color:#ffd79a}
+  .feed{font-size:12px;max-height:250px;overflow:auto}
+  .ev{padding:6px 8px;border-left:3px solid var(--line);margin-bottom:4px;background:#0f1628;border-radius:0 7px 7px 0}
+  .ev.t1{border-left-color:var(--t1)} .ev.hit{border-left-color:var(--atk)}
+  .ev.quiet{opacity:.55;border-left-color:#2b3755}
+  .ev b{color:#fff}
+  .chip{display:inline-block;background:#1d2740;border-radius:6px;padding:1px 6px;margin:2px 3px 0 0;font-size:10.5px}
+  .muted{color:var(--muted)}
+  .legend{display:flex;gap:13px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin-top:9px}
+  .legend i{display:inline-block;width:16px;height:3px;vertical-align:middle;margin-right:5px;border-radius:2px}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:5px;min-height:1.5em}
+  hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>ACCDS Hospital — live attack console</h1>
+    <div class="sub">You are the attacker. Pick a device, pick a target, and watch all seven layers respond.</div>
+  </div>
+  <div class="sub" id="baseline"></div>
+</header>
+
+<div class="wrap">
+  <div class="stage-wrap">
+    <svg id="stage" viewBox="0 0 1000 620"></svg>
+    <div class="legend">
+      <span><i style="background:#2b3755"></i>permitted link</span>
+      <span><i style="background:#ff3b5c"></i>attack traffic</span>
+      <span><i style="background:#ef4444"></i>Tier 1 life-critical</span>
+      <span><i style="background:#f59e0b"></i>Tier 2 clinical</span>
+      <span><i style="background:#38bdf8"></i>Tier 3 non-clinical</span>
+      <span><i style="background:#4a1020"></i>compromised</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div id="alert"></div>
+
+    <h2>Launch an attack</h2>
+    <label>Attack from</label>
+    <select id="src"></select>
+    <label>Target</label>
+    <select id="dst"></select>
+    <label>Attack type</label>
+    <select id="type"></select>
+    <div class="hint" id="hint"></div>
+    <div class="row">
+      <button id="fire" class="danger">Launch attack</button>
+      <button id="reset">Reset</button>
+    </div>
+    <div class="row">
+      <button id="campaign">Run full campaign</button>
+    </div>
+
+    <div id="gate"></div>
+
+    <hr>
+    <h2>Pipeline feed</h2>
+    <div class="feed" id="feed"><span class="muted">No activity yet.</span></div>
+
+    <hr>
+    <h2>Device</h2>
+    <div id="detail" class="muted">Click a device on the map.</div>
+  </div>
+</div>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+const svg=document.getElementById('stage');
+let HOSP=null, STATE=null, selected=null, pos={};
+
+const el=(t,a={},p=svg)=>{const n=document.createElementNS(NS,t);
+  for(const[k,v]of Object.entries(a))n.setAttribute(k,v);p.appendChild(n);return n;};
+const api=async(path,body)=>{
+  const opt=body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{};
+  const r=await fetch(path,opt);return r.json();};
+
+const TIER={1:'#ef4444',2:'#f59e0b',3:'#38bdf8'};
+let nodeEls={}, atkLayer=null;
+
+async function boot(){
+  HOSP=await api('/api/hospital');
+  drawMap();
+  fillSelects();
+  STATE=await api('/api/state');
+  render();
+  document.getElementById('baseline').textContent =
+    `baseline: ${STATE.baseline.events} normal events · ${STATE.baseline.devices} devices · threshold ${STATE.baseline.threshold}`;
+}
+
+function drawMap(){
+  svg.innerHTML='';
+  const zoneBy=Object.fromEntries(HOSP.zones.map(z=>[z.name,z]));
+  pos={};
+  for(const d of HOSP.devices){
+    const z=zoneBy[d.zone]; if(!z)continue;
+    const[x,y,w,h]=z.rect;
+    pos[d.asset_id]={x:x+d.pos[0]*w,y:y+d.pos[1]*h,d};
+  }
+  for(const z of HOSP.zones){
+    const[x,y,w,h]=z.rect;
+    el('rect',{x,y,width:w,height:h,rx:14,class:'room'});
+    el('rect',{x,y,width:4,height:h,rx:2,fill:z.accent,opacity:.55});
+    el('text',{x:x+14,y:y+21,class:'room-label'}).textContent=z.label;
+  }
+  const base=el('g');
+  for(const[a,b]of HOSP.baseline_edges){
+    if(!pos[a]||!pos[b])continue;
+    el('line',{x1:pos[a].x,y1:pos[a].y,x2:pos[b].x,y2:pos[b].y,class:'edge-base'},base);
+  }
+  atkLayer=el('g');
+  nodeEls={};
+  for(const d of HOSP.devices){
+    const p=pos[d.asset_id]; if(!p)continue;
+    const g=el('g',{class:'node',tabindex:'0'});
+    el('circle',{class:'body',cx:p.x,cy:p.y,r:d.tier===1?17:14,
+                 stroke:TIER[d.tier],'stroke-width':d.tier===1?4.5:d.tier===2?3:2},g);
+    el('text',{x:p.x,y:p.y+33},g).textContent=d.asset_id;
+    el('text',{x:p.x,y:p.y+45,class:'ip'},g).textContent=d.ip;
+    g.onclick=()=>pick(d.asset_id);
+    nodeEls[d.asset_id]=g;
+  }
+}
+
+function fillSelects(){
+  const srcSel=document.getElementById('src'), dstSel=document.getElementById('dst');
+  const opts=HOSP.devices.map(d=>`<option value="${d.asset_id}">${d.asset_id} (T${d.tier}) — ${d.asset_type}</option>`).join('');
+  srcSel.innerHTML=opts;
+  dstSel.innerHTML=opts;
+  srcSel.value='office-ws'; dstSel.value='admin-print';
+  const typeSel=document.getElementById('type');
+  typeSel.innerHTML=HOSP.attack_types.map(a=>`<option value="${a.id}">${a.label}</option>`).join('');
+  typeSel.onchange=showHint; showHint();
+  srcSel.onchange=()=>{pick(srcSel.value,true);render();};
+  dstSel.onchange=render;
+}
+function showHint(){
+  const t=HOSP.attack_types.find(a=>a.id===document.getElementById('type').value);
+  document.getElementById('hint').textContent=t?t.hint:'';
+}
+
+function pick(id,fromSelect){
+  selected=id;
+  if(!fromSelect)document.getElementById('src').value=id;
+  const d=HOSP.devices.find(x=>x.asset_id===id);
+  const hits=(STATE?.stages||[]).filter(s=>s.asset_id===id);
+  document.getElementById('detail').innerHTML=`<dl class="kv">
+    <dt>Asset</dt><dd>${d.asset_id}</dd>
+    <dt>Type</dt><dd>${d.asset_type}</dd>
+    <dt>Zone</dt><dd>${d.zone}</dd>
+    <dt>Tier</dt><dd><span class="tier tier${d.tier}">Tier ${d.tier}</span></dd>
+    <dt>IP</dt><dd>${d.ip}</dd>
+    <dt>Vendor</dt><dd>${d.vendor} ${d.software_version}</dd>
+    <dt>Fallback</dt><dd>${d.fallback_mode}</dd>
+    <dt>Services</dt><dd>${d.services.map(s=>`<span class="chip">${s}</span>`).join('')}</dd>
+    <dt>Can reach</dt><dd>${d.peers.map(s=>`<span class="chip">${s}</span>`).join('')}</dd>
+    <dt>Constraints</dt><dd>${d.constraints.join('; ')}</dd>
+    <dt>Attacked</dt><dd>${hits.length?hits.length+'×':'<span class="muted">not yet</span>'}</dd>
+  </dl>`;
+  render();
+}
+
+function render(){
+  if(!STATE)return;
+  const src=document.getElementById('src').value, dst=document.getElementById('dst').value;
+  atkLayer.innerHTML='';
+  Object.entries(nodeEls).forEach(([id,n])=>{
+    n.classList.toggle('pwn',STATE.compromised.includes(id));
+    n.classList.toggle('hit',(STATE.stages||[]).some(s=>s.asset_id===id&&s.finding));
+    n.classList.toggle('sel',id===src);
+    n.classList.toggle('target',id===dst);
+  });
+  (STATE.stages||[]).forEach((s,i)=>{
+    const a=pos[s.src],b=pos[s.dst]||pos[s.asset_id];
+    if(!a||!b)return;
+    const mx=(a.x+b.x)/2,my=(a.y+b.y)/2-38;
+    el('path',{d:`M${a.x},${a.y} Q${mx},${my} ${b.x},${b.y}`,class:'edge-atk'},atkLayer);
+    el('circle',{cx:mx,cy:my+19,r:9,fill:'#ff3b5c'},atkLayer);
+    el('text',{x:mx,y:my+22.5,'text-anchor':'middle','font-size':'10',
+               'font-weight':'700',fill:'#fff'},atkLayer).textContent=i+1;
+  });
+  renderFeed(); renderGate();
+  document.getElementById('fire').disabled=STATE.awaiting_approval;
+}
+
+function renderFeed(){
+  const feed=document.getElementById('feed');
+  if(!STATE.stages.length){feed.innerHTML='<span class="muted">No activity yet.</span>';return;}
+  feed.innerHTML=STATE.stages.slice().reverse().map(s=>{
+    const f=s.finding;
+    const cls=!f?'quiet':(s.tier===1?'t1':'hit');
+    const score=f?`risk ${f.risk_score} · ${f.indicators.join(', ')}`:'below threshold — no finding';
+    const corr=s.correlated_findings>1?` · <b>case has ${s.correlated_findings} findings</b>`:'';
+    return `<div class="ev ${cls}"><b>${s.stage}. ${s.src} → ${s.dst}</b>
+      <span class="tier tier${s.tier}">T${s.tier}</span><br>
+      <span class="muted">${s.event_type} · ${score}${corr}</span></div>`;
+  }).join('');
+}
+
+function renderGate(){
+  const gate=document.getElementById('gate'), alert=document.getElementById('alert');
+  if(STATE.awaiting_approval&&STATE.pending_proposal){
+    const p=STATE.pending_proposal;
+    const chain=(p.attack_chain||[]).map((h,i)=>
+      `${i+1}. ${h.attacker} → ${h.victim} <span class="tier tier${h.victim_tier}">T${h.victim_tier}</span>`).join('<br>');
+    const acts=p.candidate_actions.map(a=>
+      `<div class="chip">${a.action_type} → ${a.target_asset}</div>`).join('');
+    const pres=p.candidate_actions.flatMap(a=>a.preserved_flows||[])
+      .map(f=>`<span class="chip">${f.protocol}:${f.port}</span>`).join('');
+    gate.innerHTML=`<hr><h2>Layer 5 — approval required</h2>
+      <div class="banner crit">${p.clinical_impact}</div>
+      <div class="kv">
+        <dt>Case</dt><dd>${p.case_id}</dd>
+        <dt>Findings</dt><dd>${p.correlated_finding_ids.length}</dd>
+        <dt>Confidence</dt><dd>${p.confidence}</dd>
+      </div>
+      <label>Attack path</label><div style="font-size:12px">${chain||'<span class="muted">single event</span>'}</div>
+      <label>Proposed actions</label><div>${acts}</div>
+      <label>Clinical flows preserved</label><div>${pres||'<span class="muted">none</span>'}</div>
+      <label>Reviewer</label><input type="text" id="reviewer" value="analyst_dr_smith">
+      <label>Reason</label><input type="text" id="reason" placeholder="why you decided this way">
+      <div class="row">
+        <button class="good" onclick="decide(true)">Approve</button>
+        <button class="danger" onclick="decide(false)">Reject</button>
+      </div>`;
+    alert.innerHTML=`<div class="banner warn">A Tier ${Math.min(...p.attack_chain.map(h=>h.victim_tier))} asset is involved. Layer 5 is holding containment for your decision.</div>`;
+  }else{
+    gate.innerHTML='';
+    const d=STATE.last_decision,e=STATE.last_enforcement;
+    alert.innerHTML=d?`<div class="banner ${d.decision==='APPROVED'?'ok':'crit'}">
+      Layer 5: ${d.decision} by ${d.reviewer}<br>
+      <span style="font-weight:400">${d.reason||''}</span><br>
+      <span style="font-weight:400" class="muted">Layer 4: ${e?e.status:'n/a'}${e&&e.status==='APPLIED'?` · ${e.preserved_flows.length} clinical path(s) preserved`:''}</span>
+    </div>`:'';
+  }
+}
+
+async function fire(){
+  const r=await api('/api/attack',{
+    src:document.getElementById('src').value,
+    dst:document.getElementById('dst').value,
+    event_type:document.getElementById('type').value});
+  if(r.state)STATE=r.state;
+  if(!r.ok&&r.message)document.getElementById('alert').innerHTML=`<div class="banner warn">${r.message}</div>`;
+  render();
+}
+async function decide(approve){
+  const r=await api('/api/decision',{approve,
+    reviewer:document.getElementById('reviewer').value,
+    reason:document.getElementById('reason').value});
+  if(r.state)STATE=r.state;
+  render();
+}
+document.getElementById('fire').onclick=fire;
+document.getElementById('reset').onclick=async()=>{STATE=(await api('/api/reset',{})).state;render();};
+document.getElementById('campaign').onclick=async()=>{
+  const r=await api('/api/campaign',{name:'lateral_to_icu'});
+  if(r.state)STATE=r.state;render();};
+
+boot();
+</script>
+</body>
+</html>
