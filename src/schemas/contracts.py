@@ -36,8 +36,15 @@ class AssetContext(BaseModel):
 
 class DetectionFinding(BaseModel):
     finding_id: str
+    #: The device at risk - the victim, not the attacker.
     asset_id: str
+    #: Raw address the activity came from (IP or hostname).
     attacker_src: Optional[str] = None
+    #: ``attacker_src`` resolved against the inventory, when it is a device we
+    #: know. Correlation compares this against the assets already in a case, so
+    #: both sides must be asset ids; comparing a raw address to an asset id can
+    #: never match and silently breaks lateral-movement detection.
+    attacker_asset_id: Optional[str] = None
     behavior_window: str
     anomaly_score: float
     risk_score: float
@@ -73,6 +80,10 @@ class ResponseProposal(BaseModel):
     expiry_time: str
     rollback_plan: RollbackPlan
     correlated_finding_ids: List[str] = Field(default_factory=list)
+    #: The campaign read as a path: who hit whom, in order. A reviewer deciding
+    #: whether to cut a flow to a patient monitor needs to see that this is the
+    #: sixth hop of a campaign, not an isolated incident.
+    attack_chain: List[Dict[str, Any]] = Field(default_factory=list)
 
 # ---------------------------------------------------------------------------
 # Layer 6 handoff - "All layers -> Layer 6" audit event
@@ -162,17 +173,11 @@ class DecisionRecord(BaseModel):
     expiry: str
     approved_action: Optional[ResponseProposal] = None
 
-# Add to src/schemas/contracts.py
-
-class AuditEvent(BaseModel):
-    audit_id: str
-    timestamp: str
-    layer_source: str
-    actor: str
-    event_type: str
-    summary: str
-    payload_hash: str
-    redacted_payload: Dict[str, Any]
+# NOTE: a second `AuditEvent` class used to be declared here. Because Python
+# rebinds the name, it silently replaced the richer definition above - any code
+# importing AuditEvent got a model with no `layer`, `record_class` or
+# `outcome`, which are the fields the Layer 6 chain requires. Removed; the
+# definition above is the contract.
 
 
 class IncidentReport(BaseModel):
