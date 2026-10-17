@@ -58,8 +58,17 @@ def summarize(event_payload: Dict[str, Any], action: str, layer: int) -> str:
     if layer == 4:
         if action.endswith("rolled_back"):
             return f"Rollback {get('rollback_token')} on {get('target_asset')} ({get('trigger')})"
+        # Enforcement implementations differ: one reports applied_controls as
+        # plain strings, another as {"type": ..., "target": ...} dicts. Layer 6
+        # records what the other layers actually produce, so accept both.
+        controls = []
+        for control in get("applied_controls") or []:
+            if isinstance(control, dict):
+                controls.append(str(control.get("type", control)))
+            else:
+                controls.append(str(control))
         return (
-            f"{', '.join(get('applied_controls') or [])} on {get('target_asset')}: "
+            f"{', '.join(controls)} on {get('target_asset')}: "
             f"{len(get('blocked_flows') or [])} flow(s) blocked, "
             f"{len(get('preserved_flows') or [])} preserved, status {get('status')}"
         )

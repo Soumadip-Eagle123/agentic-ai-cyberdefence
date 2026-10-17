@@ -8,9 +8,9 @@ for real, only the small functions in this module change.
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence
-from datetime import datetime, timezone
 from .contracts import AuditEvent, Outcome, RecordClass, new_audit_event, parse_timestamp
 
 
@@ -109,8 +109,17 @@ def findings_to_audit(
 ) -> List[AuditEvent]:
     audit: List[AuditEvent] = []
     for finding in findings:
-        window = finding.get("behavior_window", {})
-        timestamp = parse_timestamp(window.get("end") or window.get("start"))
+        # Two Layer 2 implementations disagree on `behavior_window`: the batch
+        # model emits {"start": ..., "end": ...} while the streaming detector
+        # emits a duration label like "5m". Layer 6 is schema-tolerant on input
+        # by design - it records what the other layers actually produce - so
+        # accept both and fall back to the finding's own timestamp.
+        window = finding.get("behavior_window")
+        if isinstance(window, dict):
+            stamp = window.get("end") or window.get("start")
+        else:
+            stamp = finding.get("timestamp")
+        timestamp = parse_timestamp(stamp) if stamp else datetime.now(timezone.utc)
         audit.append(
             new_audit_event(
                 layer=2,
