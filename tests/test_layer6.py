@@ -21,20 +21,20 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-from compliance.access import AccessController
-from compliance.audit_store import TamperEvidentAuditStore, canonical_json
-from compliance.contracts import (
+from src.compliance.access import AccessController
+from src.compliance.audit_store import TamperEvidentAuditStore, canonical_json
+from src.compliance.contracts import (
     AccessRole,
     Outcome,
     RecordClass,
     ViewKind,
     new_audit_event,
 )
-from compliance.evidence import verify_evidence_package
-from compliance.pipeline import run_pipeline
-from compliance.redaction import RedactionEngine
-from compliance.reporting import build_report, get_adapter, render_markdown
-from compliance.timeline import build_timeline
+from src.compliance.evidence import verify_evidence_package
+from src.compliance.pipeline import run_pipeline
+from src.compliance.redaction import RedactionEngine
+from src.compliance.reporting import build_report, get_adapter, render_markdown
+from src.compliance.timeline import build_timeline
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
