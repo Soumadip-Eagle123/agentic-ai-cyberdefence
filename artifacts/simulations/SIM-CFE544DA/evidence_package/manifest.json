@@ -1,0 +1,40 @@
+{
+  "package_id": "EVID-CASE-CORR-626FEF",
+  "case_id": "CASE-CORR-626FEF",
+  "scenario_id": "off_hours",
+  "generated_at": "2026-10-20T18:05:04.069730+00:00",
+  "contract_version": "accds-audit-v1",
+  "view": "operational",
+  "contains_forensic_records": false,
+  "audit_chain": {
+    "ok": true,
+    "records_checked": 16,
+    "head_hash": "cbd1339307a742170bcdacb4777e8d93b9236428052c0c88f379c18297e99569",
+    "first_broken_sequence": null,
+    "reason": "chain intact",
+    "store_path": "/home/soumadipsen/Desktop/AI Engineering/agentic-ai-cyberdefence/artifacts/simulations/SIM-CFE544DA/audit_chain.jsonl",
+    "store_records": 16
+  },
+  "files": [
+    {
+      "name": "incident_timeline.json",
+      "bytes": 9364,
+      "sha256": "9a73f12f629b3134708d0800be3ecd00dd70ab550262a87211e1a1d2859c43c1"
+    },
+    {
+      "name": "operational_view.jsonl",
+      "bytes": 18032,
+      "sha256": "dd6fe997a67480b5b6accad7e927ccf2ab702198cedc4d8128c3f0a5cfbef9d6"
+    },
+    {
+      "name": "layer6_metrics.json",
+      "bytes": 1485,
+      "sha256": "a574b48227fe6ab834055f9d313bb7bd998ea86ecb452d1618707038ee56fcc3"
+    },
+    {
+      "name": "CASE-CORR-626FEF.md",
+      "bytes": 4353,
+      "sha256": "76297568ee0989d33aa262c6b40d4c0c035890243e3f9bb59b0fb225fd744272"
+    }
+  ]
+}

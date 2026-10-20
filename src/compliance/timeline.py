@@ -50,7 +50,15 @@ def summarize(event_payload: Dict[str, Any], action: str, layer: int) -> str:
             f"{get('anomaly_score')}, risk {get('risk_score')}, indicators [{indicators_str}]"
         )
     if layer == 3:
-        actions = ", ".join(item.get("action_type", "?") for item in (get("candidate_actions") or []))
+        actions_list = []
+        for item in (get("candidate_actions") or []):
+            if isinstance(item, dict):
+                actions_list.append(str(item.get("action_type", "?")))
+            elif hasattr(item, "action_type"):
+                actions_list.append(str(item.action_type))
+            else:
+                actions_list.append(str(item))
+        actions = ", ".join(actions_list)
         return (
             f"Case {get('case_id')} proposes [{actions}] at approval level "
             f"{get('approval_level')}; {get('clinical_impact')}"
@@ -58,8 +66,19 @@ def summarize(event_payload: Dict[str, Any], action: str, layer: int) -> str:
     if layer == 4:
         if action.endswith("rolled_back"):
             return f"Rollback {get('rollback_token')} on {get('target_asset')} ({get('trigger')})"
+        
+        # Defensive fix: applied_controls can be strings or dicts
+        raw_controls = get("applied_controls") or []
+        ctrl_strs = []
+        for c in raw_controls:
+            if isinstance(c, dict):
+                ctrl_strs.append(f"{c.get('type', 'CONTROL')}:{c.get('target', '')}".rstrip(":"))
+            else:
+                ctrl_strs.append(str(c))
+        controls_label = ", ".join(ctrl_strs) if ctrl_strs else "NO_CONTROLS"
+
         return (
-            f"{', '.join(get('applied_controls') or [])} on {get('target_asset')}: "
+            f"{controls_label} on {get('target_asset')}: "
             f"{len(get('blocked_flows') or [])} flow(s) blocked, "
             f"{len(get('preserved_flows') or [])} preserved, status {get('status')}"
         )

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#08111b" />
+    <meta name="description" content="ACCDS hospital network digital twin simulator" />
+    <title>ACCDS · Clinical Defense Simulator</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script defer src="/app.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="ACCDS dashboard home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="brand-copy"><strong>ACCDS</strong><small>CLINICAL DEFENSE SYSTEM</small></span>
+        </a>
+        <div class="topbar-center"><span class="live-dot"></span><span>DIGITAL TWIN</span><span class="divider">/</span><span class="muted">HOSPITAL NETWORK</span></div>
+        <div class="topbar-right">
+          <div class="status-pill" id="system-status"><span class="status-light"></span><span id="system-status-text">NORMAL</span></div>
+          <div class="ledger-pill" id="ledger-status"><span class="lock-icon" aria-hidden="true">⌑</span><span id="ledger-status-text">CHAIN VALID</span></div>
+          <span class="clock-label" id="local-clock">--:--:-- UTC</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero-row">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> SECURITY OPERATIONS CENTER <span class="eyebrow-sep">·</span> SIMULATION 01</div>
+            <h1>Clinical network <span>command</span></h1>
+            <p class="hero-subtitle">Observe a seven-layer defense workflow across the hospital digital twin.</p>
+          </div>
+          <div class="control-cluster">
+            <button class="button button-quiet" id="open-terminal" aria-expanded="false" aria-controls="terminal-panel"><span class="button-icon">›_</span> <span id="terminal-toggle-label">Open attack terminal</span></button>
+            <button class="button button-outline" id="open-attack"><span class="button-icon">＋</span> Launch attack</button>
+            <button class="button button-primary" id="run-pipeline"><span class="button-icon">▶</span> Run pipeline</button>
+            <button class="button button-step" id="step-layer" title="Advance one layer"><span>STEP</span><b>↗</b></button>
+            <button class="button button-post-rollback hidden" id="post-rollback" title="Roll back the active digital-twin rule">Rollback</button>
+            <button class="button button-reset" id="reset-sim" title="Reset the current simulation">Reset</button>
+          </div>
+        </section>
+
+        <div class="simulation-banner"><span class="banner-shield">◆</span><span><strong>SIMULATION MODE</strong> Layer 4 actions change in-memory digital-twin rules only. No hospital network devices are contacted.</span><span class="banner-model" id="baseline-label">BEHAVIOR MODEL · LAYER 2</span></div>
+
+        <section class="workspace-grid">
+          <article class="panel topology-panel">
+            <div class="panel-heading">
+              <div><div class="panel-kicker">01 <span>·</span> NETWORK MAP</div><h2>Hospital digital twin</h2></div>
+              <div class="map-summary"><span class="map-counter"><i class="green-dot"></i> <b id="online-count">06</b> NODES</span><span class="map-live"><i class="pulse-dot"></i> LIVE VIEW</span></div>
+            </div>
+            <div class="topology-map" id="topology-map">
+              <div class="zone zone-icu"><span>01 / INTENSIVE CARE</span><small>CLINICAL CORE</small></div>
+              <div class="zone zone-lab"><span>02 / LABORATORY</span><small>WORKFLOW CRITICAL</small></div>
+              <div class="zone zone-admin"><span>03 / ADMINISTRATION</span><small>NON-CLINICAL</small></div>
+              <div class="zone zone-radiology"><span>04 / RADIOLOGY</span><small>IMAGING</small></div>
+              <div class="zone zone-ops"><span>05 / SECURITY OPERATIONS</span><small>RECORDS CORE</small></div>
+              <svg class="wire-layer" id="wire-layer" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-label="Hospital network connections"></svg>
+              <div class="device-layer" id="device-layer"></div>
+              <div class="map-callout" id="map-callout"><span class="callout-orb"></span><div><strong>CLINICAL STREAMS PROTECTED</strong><small>HL7 2575 remains active during containment</small></div></div>
+            </div>
+            <div class="map-legend">
+              <span><i class="legend-line line-clinical"></i> Active clinical</span>
+              <span><i class="legend-line line-attack"></i> Attack / anomaly</span>
+              <span><i class="legend-line line-blocked"></i> Surgically blocked</span>
+              <span><i class="legend-line line-inactive"></i> Inactive / isolated</span>
+              <span class="map-footnote">Select a device or active path for details</span>
+            </div>
+          </article>
+
+          <aside class="right-column">
+            <article class="panel pipeline-panel">
+              <div class="panel-heading compact-heading">
+                <div><div class="panel-kicker">02 <span>·</span> DEFENSE PIPELINE</div><h2>Layer progression</h2></div>
+                <span class="step-count" id="step-count">0 / 7</span>
+              </div>
+              <div class="stepper" id="layer-stepper" aria-label="Seven layer pipeline"></div>
+              <div class="pipeline-current" id="pipeline-current"><span class="current-marker"></span><div><strong>Awaiting simulation</strong><small>Launch a scenario to begin ingestion.</small></div><span class="current-state">READY</span></div>
+            </article>
+
+            <article class="panel inspector-panel">
+              <div class="panel-heading compact-heading">
+                <div><div class="panel-kicker">03 <span>·</span> ACTIVE INSPECTOR</div><h2 id="inspector-title">Layer payload</h2></div>
+                <span class="json-tag">JSON</span>
+              </div>
+              <div class="inspector-summary" id="inspector-summary"><span class="summary-icon">⌁</span><span>Select a pipeline layer to inspect its output.</span></div>
+              <pre class="json-viewer" id="json-viewer"><span class="json-muted">// Layer payload appears here</span></pre>
+            </article>
+
+            <article class="panel chain-panel" id="chain-panel">
+              <div class="panel-heading compact-heading">
+                <div><div class="panel-kicker">04 <span>·</span> ATTACK TRACE</div><h2>Chained attack path</h2></div>
+                <span class="trace-tag" id="trace-tag">STANDBY</span>
+              </div>
+              <div class="chain-empty" id="chain-empty"><span class="chain-empty-icon">⌁</span><span>Attack movement and blast radius will appear here.</span></div>
+              <div class="chain-content hidden" id="chain-content">
+                <div class="chain-flow" id="chain-flow"></div>
+                <div class="chain-metrics">
+                  <div><small>ATTACKER SOURCE</small><strong id="chain-source">—</strong></div>
+                  <div><small>RELATED EVENTS</small><strong id="chain-events">—</strong></div>
+                  <div><small>BLAST RADIUS</small><strong id="chain-blast">—</strong></div>
+                </div>
+                <div class="chain-note" id="chain-note">Select the active path to inspect correlated evidence.</div>
+              </div>
+            </article>
+          </aside>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel terminal-panel collapsed" id="terminal-panel">
+            <div class="panel-heading lower-heading">
+              <div><div class="panel-kicker">05 <span>·</span> OPERATOR CONSOLE</div><h2>Attack terminal <span class="terminal-state">SIMULATED</span></h2></div>
+              <button class="text-button" id="toggle-help" aria-expanded="false">Command help <span>⌄</span></button>
+            </div>
+            <div class="terminal-window">
+              <div class="terminal-toolbar"><span class="terminal-dots"><i></i><i></i><i></i></span><span>ACCDS SIMULATOR <span class="terminal-path">/ digital-twin / attack-console</span></span><button class="terminal-clear" id="clear-terminal">CLEAR</button></div>
+              <div class="terminal-output" id="terminal-output" role="log" aria-live="polite"><div class="terminal-welcome"><span>ACCDS INTERACTIVE SIMULATOR v1.0</span><br />All commands run in the hospital digital twin. Type <b>help</b> to view syntax.<br /><span class="terminal-muted">No traffic leaves this local simulator.</span></div></div>
+              <form class="terminal-input-row" id="terminal-form">
+                <label for="terminal-input"><span class="prompt-mark">›</span></label>
+                <input id="terminal-input" autocomplete="off" spellcheck="false" placeholder="attack --type port_scan --src office-ws --dst radiology-ws" />
+                <button class="terminal-submit" type="submit" aria-label="Run terminal command">RUN <span>↵</span></button>
+              </form>
+            </div>
+            <div class="help-box hidden" id="help-box">
+              <div class="help-head"><div><strong>COMMAND REFERENCE</strong><small>Arguments: --type · --src · --dst · --bytes · --chain</small></div><button id="close-help" aria-label="Close command help">×</button></div>
+              <div class="help-command-grid" id="help-command-grid"></div>
+            </div>
+          </article>
+
+          <article class="panel audit-panel">
+            <div class="panel-heading lower-heading">
+              <div><div class="panel-kicker">06 <span>·</span> AUDIT &amp; EVIDENCE</div><h2>Incident narrative</h2></div>
+              <button class="button button-export" id="export-evidence" disabled><span>⇩</span> Export .zip</button>
+            </div>
+            <div class="audit-tabs" id="audit-tabs">
+              <button class="audit-tab active" data-bucket="observed_fact">Observed <span>0</span></button>
+              <button class="audit-tab" data-bucket="model_inference">Inference <span>0</span></button>
+              <button class="audit-tab" data-bucket="human_decision">Decision <span>0</span></button>
+              <button class="audit-tab" data-bucket="action_taken">Action <span>0</span></button>
+            </div>
+            <div class="audit-content" id="audit-content"><div class="audit-empty"><span class="audit-empty-mark">◷</span><strong>Waiting for Layer 6</strong><small>Verified records and the redacted report will appear when the run completes.</small></div></div>
+            <div class="audit-integrity"><span class="chain-mini"><i class="green-dot"></i> <span id="audit-chain-label">CHAIN VALID</span></span><span id="audit-record-count">0 RECORDS</span><button class="text-button report-button" id="open-report" disabled>Open markdown report ↗</button></div>
+          </article>
+        </section>
+
+        <footer class="app-footer"><span>ACCDS DIGITAL TWIN <span class="footer-sep">/</span> SAFETY FIRST</span><span>NETWORK CONTROLS ARE SIMULATED <span class="footer-sep">·</span> LOCAL AUDIT LEDGER</span><span id="footer-simulation">NO ACTIVE RUN</span></footer>
+      </main>
+    </div>
+
+    <div class="modal-backdrop hidden" id="attack-modal" role="dialog" aria-modal="true" aria-labelledby="attack-modal-title">
+      <section class="modal attack-dialog">
+        <div class="modal-topline"><span>ATTACK SIMULATION / CONTROLLED INPUT</span><button class="modal-close" data-close="attack-modal" aria-label="Close">×</button></div>
+        <div class="modal-heading"><span class="modal-icon attack-icon">⌁</span><div><div class="panel-kicker">DIGITAL TWIN INJECTION</div><h2 id="attack-modal-title">Launch an attack scenario</h2><p>Choose a preset or configure a controlled event sequence.</p></div></div>
+        <form id="attack-form" class="attack-form">
+          <label class="field-label" for="scenario-select">PRESET SCENARIO</label>
+          <select class="field-control" id="scenario-select"><option value="custom_attack">Custom attack</option></select>
+          <div class="form-grid">
+            <div><label class="field-label" for="attack-source">ATTACKER SOURCE NODE</label><select class="field-control" id="attack-source"></select></div>
+            <div><label class="field-label" for="attack-target">VICTIM / TARGET NODE</label><select class="field-control" id="attack-target"></select></div>
+          </div>
+          <label class="field-label" for="attack-vector">ATTACK VECTOR</label>
+          <select class="field-control" id="attack-vector"><option value="PORT_SCAN">Port scan / discovery</option><option value="LATERAL_MOVEMENT">Lateral movement</option><option value="MALWARE_STAGING">Malware staging</option><option value="CREDENTIAL_DUMP">Credential dump</option><option value="EXFILTRATION">Data exfiltration</option></select>
+          <label class="check-row"><input type="checkbox" id="chain-toggle" /><span class="custom-check"></span><span><strong>Chained lateral movement</strong><small>Choose a multi-hop path through the hospital network.</small></span></label>
+          <div class="chain-picker hidden" id="chain-picker"><label class="field-label" for="chain-next-hop">ORDERED ATTACK PATH <small>Add each pivot in sequence</small></label><div class="chain-controls"><select class="field-control" id="chain-next-hop"></select><button class="button button-outline" id="append-hop" type="button">Add hop +</button><button class="chain-clear" id="clear-chain" type="button">Clear</button></div><div class="chain-sequence" id="chain-sequence"></div><div class="field-hint">Tier 1 targets pause at human approval. Clinical feeds stay active in every outcome.</div></div>
+          <div class="modal-safety-note"><span>◆</span><span>Layer 4 controls run against an in-memory digital twin. They never alter a live network.</span></div>
+          <div class="modal-actions"><button type="button" class="button button-quiet" data-close="attack-modal">Cancel</button><button type="submit" class="button button-primary"><span>▶</span> Execute attack</button></div>
+        </form>
+      </section>
+    </div>
+
+    <div class="modal-backdrop hidden" id="decision-modal" role="dialog" aria-modal="true" aria-labelledby="decision-title">
+      <section class="modal decision-dialog">
+        <div class="modal-topline"><span class="decision-alert"><i></i> LAYER 5 / HUMAN REVIEW REQUIRED</span><button class="modal-close" data-close="decision-modal" aria-label="Close">×</button></div>
+        <div class="decision-header"><div class="decision-emblem">!</div><div><div class="panel-kicker">CLINICAL SAFETY CHECKPOINT</div><h2 id="decision-title">Action paused for review</h2><p>The pipeline will not proceed to enforcement until a reviewer records a decision.</p></div></div>
+        <div class="decision-target"><div><small>TARGET ASSET</small><strong id="decision-asset">icu-monitor-gw</strong><span id="decision-tier">TIER 1 · LIFE-CRITICAL</span></div><span class="review-required">REVIEW REQUIRED</span></div>
+        <div class="proposed-action"><div class="action-label"><span>PROPOSED ACTION</span><span class="action-tag">SURGICAL BLOCK</span></div><p id="decision-action">Block SMB port 445 while preserving HL7 vitals on port 2575.</p>
+          <div class="preserved-feed"><span class="feed-pulse"></span><span><b id="decision-feed-title">HL7 PORT 2575 ACTIVE</b><small id="decision-feed-description">Clinical telemetry is explicitly preserved.</small></span><span class="feed-state">LIVE</span></div>
+        </div>
+        <div class="scope-hash"><div><small>CRYPTOGRAPHIC SCOPE HASH</small><code id="scope-hash-value">sha256:pending</code></div><button id="copy-hash" type="button">COPY</button></div>
+        <div class="review-fields"><label><span>REVIEWER ID</span><input id="reviewer-id" value="soc-analyst" maxlength="80" /></label><label><span>DECISION NOTE</span><input id="decision-reason" value="Approved surgical containment; clinical feeds verified." maxlength="240" /></label></div>
+        <div class="decision-actions"><button id="reject-action" class="button button-reject"><span>×</span> Reject</button><button id="rollback-action" class="button button-rollback"><span>↶</span> Trigger rollback</button><button id="approve-action" class="button button-primary"><span>✓</span> Approve action</button></div>
+        <div class="decision-footnote">Approval is bound to the exact scope above. Rejection records the decision and skips enforcement.</div>
+      </section>
+    </div>
+
+    <div class="toast-region" id="toast-region" aria-live="polite"></div>
+  </body>
+</html>

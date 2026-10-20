@@ -133,7 +133,7 @@ class ResponsePlannerAgent:
         rollback_steps = []
 
         for asset_id, asset in case_data["asset_contexts"].items():
-            if asset.clinical_tier in (ClinicalTier.TIER_1, ClinicalTier.TIER_2):
+            if asset.clinical_tier == ClinicalTier.TIER_1:
                 actions.append(
                     ActionDetail(
                         action_type="SURGICAL_BLOCK",
@@ -143,6 +143,22 @@ class ResponsePlannerAgent:
                     )
                 )
                 rollback_steps.append(f"Restore firewall table for Tier {asset.clinical_tier.value} asset '{asset_id}'")
+            elif asset.clinical_tier == ClinicalTier.TIER_2:
+                if asset.asset_id == "radiology-ws":
+                    preserved = [{"protocol": "DICOM", "port": 104, "direction": "BIDIRECTIONAL"}]
+                elif asset.asset_id == "lab-server":
+                    preserved = [{"protocol": "TCP", "port": 5432, "direction": "INBOUND"}]
+                else:
+                    preserved = [{"protocol": "TCP", "port": 443, "direction": "BIDIRECTIONAL"}]
+                actions.append(
+                    ActionDetail(
+                        action_type="SCOPED_BLOCK",
+                        target_asset=asset_id,
+                        blocked_flows=[{"protocol": "TCP", "port": 445, "direction": "INBOUND"}],
+                        preserved_flows=preserved,
+                    )
+                )
+                rollback_steps.append(f"Restore scoped rules for Tier 2 asset '{asset_id}'")
             else:
                 actions.append(
                     ActionDetail(
