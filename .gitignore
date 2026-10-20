@@ -81,5 +81,6 @@ Thumbs.db
 .env.*
 
 ACCDS_Architecture_Roadmap.pdf
-.claude/settings.local.json
+# Layer 6 generated output (regenerated per run; was causing 127-file diffs)
 artifacts/
+.claude/settings.local.json

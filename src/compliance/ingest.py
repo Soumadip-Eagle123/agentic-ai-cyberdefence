@@ -14,6 +14,19 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence
 from .contracts import AuditEvent, Outcome, RecordClass, new_audit_event, parse_timestamp
 
 
+def enum_text(value: Any) -> str:
+    """The wire value of a field that may arrive as an Enum member.
+
+    ``BaseModel.model_dump()`` returns enum *members*, not their values, and
+    since Python 3.12 ``str(SomeStrEnum.MEMBER)`` renders as
+    "DecisionOutcome.APPROVED" rather than "APPROVED". Coercing with str() made
+    every decision and enforcement status fail its lookup and silently fall back
+    to the default outcome, so an approved containment was recorded as escalated
+    and a failed one as a success.
+    """
+    return str(getattr(value, "value", value) if value is not None else "")
+
+
 def load_json(path: str | Path) -> Any:
     with Path(path).open(encoding="utf-8") as handle:
         return json.load(handle)
@@ -199,7 +212,7 @@ def decision_to_audit(decision: Dict[str, Any], scenario_id: Optional[str] = Non
         input_reference=f"case://{decision.get('case_id')}",
         output_reference=f"decision://{decision.get('decision_id')}",
         record_class=RecordClass.HUMAN_DECISION,
-        outcome=mapping.get(str(decision.get("decision")).upper(), Outcome.ESCALATED),
+        outcome=mapping.get(enum_text(decision.get("decision")).upper(), Outcome.ESCALATED),
         timestamp=parse_timestamp(decision["timestamp"]),
         case_id=decision.get("case_id"),
         scenario_id=scenario_id,
@@ -222,11 +235,11 @@ def enforcement_to_audit(result: Dict[str, Any], scenario_id: Optional[str] = No
     return new_audit_event(
         layer=4,
         actor="layer4.enforcement",
-        action=f"enforcement.{str(result.get('status', 'applied')).lower()}",
+        action=f"enforcement.{enum_text(result.get('status') or 'applied').lower()}",
         input_reference=f"decision://{result.get('decision_id')}",
         output_reference=f"action://{result.get('action_id')}",
         record_class=RecordClass.ACTION_TAKEN,
-        outcome=mapping.get(str(result.get("status")).upper(), Outcome.SUCCESS),
+        outcome=mapping.get(enum_text(result.get("status")).upper(), Outcome.SUCCESS),
         timestamp=parse_timestamp(result["start_time"]),
         case_id=result.get("case_id"),
         scenario_id=scenario_id,
@@ -267,4 +280,62 @@ def annotation_to_audit(annotation: Dict[str, Any]) -> AuditEvent:
         timestamp=parse_timestamp(annotation["timestamp"]),
         case_id=annotation.get("case_id"),
         payload=annotation,
+    )
+
+
+# --------------------------------------------------------------------------
+# Layer 5 - the real decision_gate package
+# --------------------------------------------------------------------------
+#: decision_gate emits lowercase verbs; the audit contract uses outcomes.
+DECISION_GATE_OUTCOMES = {
+    "approve": Outcome.SUCCESS,
+    "approved": Outcome.SUCCESS,
+    "reject": Outcome.REJECTED,
+    "rejected": Outcome.REJECTED,
+    "modify": Outcome.ESCALATED,
+    "escalate": Outcome.ESCALATED,
+    "escalated": Outcome.ESCALATED,
+    "timeout": Outcome.EXPIRED,
+}
+
+
+def decision_gate_to_audit(record: Any, scenario_id: Optional[str] = None) -> AuditEvent:
+    """Adapt a ``decision_gate.models.DecisionRecord`` into an audit event.
+
+    Accepts the dataclass or any object/dict with the same fields. Two mismatches
+    are absorbed here rather than pushed onto Layer 5:
+
+    * ``decision_gate`` stamps records with ``datetime.utcnow()``, which is naive;
+      the audit contract requires timezone-aware timestamps, so a naive value is
+      read as UTC.
+    * its decision verbs are lowercase (``approve``), while outcomes are a fixed
+      vocabulary; unknown verbs escalate rather than silently succeeding.
+    """
+    data = record if isinstance(record, dict) else {
+        name: getattr(record, name, None)
+        for name in ("decision_id", "case_id", "reviewer", "decision",
+                     "scope_hash", "reason", "approved_action", "timestamp")
+    }
+    verb = enum_text(data.get("decision")).lower()
+    outcome = DECISION_GATE_OUTCOMES.get(verb, Outcome.ESCALATED)
+    return new_audit_event(
+        layer=5,
+        actor=f"layer5.reviewer:{data.get('reviewer')}",
+        action="decision.recorded",
+        input_reference=f"case://{data.get('case_id')}",
+        output_reference=f"decision://{data.get('decision_id')}",
+        record_class=RecordClass.HUMAN_DECISION,
+        outcome=outcome,
+        timestamp=parse_timestamp(data["timestamp"]),
+        case_id=data.get("case_id"),
+        scenario_id=scenario_id,
+        payload={
+            "decision_id": data.get("decision_id"),
+            "case_id": data.get("case_id"),
+            "reviewer": data.get("reviewer"),
+            "decision": verb,
+            "scope_hash": data.get("scope_hash"),
+            "reason": data.get("reason"),
+            "approved_action": data.get("approved_action"),
+        },
     )

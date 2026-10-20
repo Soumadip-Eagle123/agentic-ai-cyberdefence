@@ -41,6 +41,7 @@ def export_evidence_package(
     forensic_records: Optional[Sequence[Dict[str, Any]]] = None,
     metrics: Optional[Dict[str, Any]] = None,
     report_files: Sequence[Path] = (),
+    checkpoint: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Write a package for one case and return its manifest.
 
@@ -94,6 +95,9 @@ def export_evidence_package(
             "store_path": str(store.path),
             "store_records": len(store),
         },
+        # An ML-DSA checkpoint carries its own public key, so a recipient can
+        # verify this package without holding any shared secret.
+        "checkpoint": checkpoint or {},
         "files": [
             {
                 "name": path.name,
@@ -126,12 +130,39 @@ def verify_evidence_package(package_dir: str | Path) -> Dict[str, Any]:
         if _sha256_file(path) != entry["sha256"]:
             mismatches.append(entry["name"])
 
-    ok = not mismatches and not missing
+    # An asymmetric checkpoint verifies from its own embedded public key, with no
+    # shared secret. A symmetric one cannot be checked here and is reported as such.
+    checkpoint = manifest.get("checkpoint") or {}
+    signature_result: Dict[str, Any] = {
+        "ok": None, "status": "absent", "reason": "no checkpoint in manifest"
+    }
+    if checkpoint:
+        from .signing import verify_checkpoint
+
+        signature_result = verify_checkpoint(checkpoint)
+        head = (manifest.get("audit_chain") or {}).get("head_hash")
+        if signature_result.get("ok") and head and checkpoint.get("head_hash") != head:
+            signature_result = {"ok": False, "status": "rejected",
+                                "reason": "checkpoint does not cover this chain head"}
+
+    files_ok = not mismatches and not missing
+    # Only an actual rejection invalidates the package. A symmetric checkpoint we
+    # hold no key for is unverifiable, which is different from forged.
+    ok = files_ok and signature_result.get("status") != "rejected"
+    if not files_ok:
+        reason = "package contents do not match the manifest"
+    elif not ok:
+        reason = f"signature rejected: {signature_result.get('reason')}"
+    elif signature_result.get("status") == "valid":
+        reason = "package intact; signature verified"
+    else:
+        reason = f"package intact; signature {signature_result.get('status')}"
     return {
         "ok": ok,
         "package_id": manifest.get("package_id"),
         "files_checked": len(manifest.get("files", [])),
         "missing_files": missing,
         "modified_files": mismatches,
-        "reason": "package intact" if ok else "package contents do not match the manifest",
+        "signature": signature_result,
+        "reason": reason,
     }
