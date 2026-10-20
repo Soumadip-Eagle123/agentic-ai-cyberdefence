@@ -459,7 +459,9 @@ def run(campaign_name: str, output_dir: Path, auto: Optional[str],
           f"{sorted({s['asset_id'] for s in tier1_hit})}")
     print(f" human approval asked : {last_proposal.approval_level == ApprovalLevel.REQUIRES_HUMAN_APPROVAL}")
     print(f" enforcement outcome  : {enforcement.status.value}")
-    print(f"\n Open the visualiser:  python -m visualiser.serve --data {topology_path}")
+    print(f"\n Replay this run      :  python -m visualiser.build --data {topology_path}")
+    print(f"                          then open {output_dir / 'topology.html'}")
+    print(f" Launch attacks live  :  PYTHONPATH=. python -m visualiser.server")
     return 0
 
 

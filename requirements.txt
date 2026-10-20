@@ -1,0 +1,28 @@
+# ACCDS runtime dependencies
+#
+#   python3 -m venv agentic_venv
+#   agentic_venv/bin/pip install -r requirements.txt
+#
+# Most of the project is standard library on purpose: the digital twin, the
+# visualiser and its HTTP server all run with nothing installed. Only the two
+# below are genuinely required.
+
+# Layer-to-layer contracts in src/schemas/contracts.py, and every layer that
+# validates against them.
+pydantic>=2.0
+
+# FIPS 204 ML-DSA checkpoint signing in src/compliance/signing.py. Needs a
+# build linked against OpenSSL 3.5+ for ML-DSA support; without it Layer 6
+# falls back to HMAC checkpoints and four signing tests skip rather than fail.
+cryptography>=46.0
+
+
+# --- Development only -------------------------------------------------------
+# The test suite runs on unittest and needs nothing extra:
+#
+#   PYTHONPATH=. agentic_venv/bin/python -m unittest discover -s tests -t .
+#
+# src/decision_gate/tests.py is written against pytest and is not picked up by
+# that discovery. Install pytest if you want to run it:
+#
+#   pytest>=8.0
